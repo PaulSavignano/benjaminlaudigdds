@@ -1,0 +1,215 @@
+import mongoose, { Schema } from 'mongoose'
+
+const BrandSchema = new Schema({
+  appBar: {
+    image: {
+      src: { type: String, trim: true },
+      width: { type: Number, trim: true, default: 128 },
+      height: { type: Number, trim: true, default: 128 }
+    },
+    values: {
+      backgroundColor: { type: String, trim: true, default: 'rgb(0, 188, 212)' },
+      color: { type: String, trim: true, default: 'rgb(255, 255, 255)' },
+      fontFamily: { type: String, trim: true },
+      fontSize: { type: String, trim: true },
+      fontWeight: { type: String, trim: true },
+      letterSpacing: { type: String, trim: true },
+      name: { type: String, trim: true, default: 'Brand' },
+      navColor: { type: String, trim: true, default: '#ffffff' },
+      textShadow: { type: String, trim: true },
+    }
+  },
+  articleStyle: {
+    values: {
+      button1BackgroundColor: { type: String, trim: true },
+      button2BackgroundColor: { type: String, trim: true },
+      button1Color: { type: String, trim: true },
+      button2Color: { type: String, trim: true },
+      h1Align: { type: String, trim: true, default: 'center' },
+      h1Color: { type: String, trim: true },
+      h1TextShadow: { type: String, trim: true },
+      h2Align: { type: String, trim: true, default: 'center' },
+      h2Color: { type: String, trim: true },
+      h2TextShadow: { type: String, trim: true },
+      h3Align: { type: String, trim: true, default: 'center' },
+      h3Color: { type: String, trim: true },
+      h3TextShadow: { type: String, trim: true },
+      mediaBorder: { type: String, trim: true },
+      mediaElevation: { type: Number, trim: true, default: 2 }
+    }
+  },
+  bodyStyle: {
+    values: {
+      backgroundColor: { type: String, trim: true, default: '#ffffff' },
+      color: { type: String, trim: true, default: 'rgba(0, 0, 0, 0.87)' },
+    }
+  },
+  business: {
+    values: {
+      name: { type: String, trim: true, default: 'Brand' },
+      description: { type: String, trim: true },
+      phone: { type: String, trim: true },
+      email: { type: String, trim: true },
+      street: { type: String, trim: true },
+      city: { type: String, trim: true },
+      state: { type: String, trim: true },
+      zip: { type: String, trim: true },
+      facebook: { type: String, trim: true },
+      github: { type: String, trim: true },
+      google: { type: String, trim: true },
+      instagram: { type: String, trim: true },
+      linkedin: { type: String, trim: true },
+      twitter: { type: String, trim: true },
+      yelp: { type: String, trim: true },
+      youtube: { type: String, trim: true },
+    }
+  },
+  cardStyle: {
+    values: {
+      button1BackgroundColor: { type: String, trim: true },
+      button2BackgroundColor: { type: String, trim: true },
+      button1Color: { type: String, trim: true },
+      button2Color: { type: String, trim: true },
+      elevation: { type: Number, trim: true, default: 1 },
+      flex: { type: String, trim: true, default: '1 1 auto' },
+      h1Align: { type: String, trim: true, default: 'center' },
+      h1Color: { type: String, trim: true },
+      h1TextShadow: { type: String, trim: true },
+      h2Align: { type: String, trim: true, default: 'center' },
+      h2Color: { type: String, trim: true },
+      h2TextShadow: { type: String, trim: true },
+      h3Align: { type: String, trim: true, default: 'center' },
+      h3Color: { type: String, trim: true, default: 'rgba(0, 0, 0, .5)' },
+      h3TextShadow: { type: String, trim: true },
+      margin: { type: String, trim: true, default: '16px' },
+      mediaBorder: { type: String, trim: true },
+      width: { type: String, trim: true },
+    }
+  },
+  footer: {
+    image: {
+      src: { type: String, trim: true },
+      width: { type: Number, trim: true, default: 128 },
+      height: { type: Number, trim: true, default: 128 }
+    },
+    values: {
+      backgroundColor: { type: String, trim: true, default: 'rgb(0, 188, 212)' },
+      color: { type: String, trim: true, default: '#ffffff' },
+      borderTop: { type: String, trim: true },
+      borderBottom: { type: String, trim: true },
+      margin: { type: String, trim: true },
+    }
+  },
+  heroStyle: {
+    values: {
+      alignItems: { type: String, trim: true, default: 'center' },
+      button1Color: { type: String, trim: true },
+      button2Color: { type: String, trim: true },
+      button1BackgroundColor: { type: String, trim: true },
+      button2BackgroundColor: { type: String, trim: true },
+      h1Align: { type: String, trim: true, default: 'center' },
+      h1Color: { type: String, trim: true },
+      h1TextShadow: { type: String, trim: true },
+      h2Align: { type: String, trim: true, default: 'center' },
+      h2Color: { type: String, trim: true },
+      h2TextShadow: { type: String, trim: true },
+      h3Align: { type: String, trim: true, default: 'center' },
+      h3Color: { type: String, trim: true },
+      h3TextShadow: { type: String, trim: true },
+      mediaBorder: { type: String, trim: true },
+      mediaElevation: { type: Number, trim: true, default: 2 },
+      minHeight: { type: String, trim: true, default: '80vh' }
+    }
+  },
+  palette: {
+    values: {
+      primary1Color: { type: String, trim: true, default: '#00BCD4' },
+      primary2Color: { type: String, trim: true, default: '#0097A7' },
+      primary3Color: { type: String, trim: true, default: '#BDBDBD' },
+      accent1Color: { type: String, trim: true, default: '#FF4081' },
+      accent2Color: { type: String, trim: true, default: '#F5F5F5' },
+      accent3Color: { type: String, trim: true, default: '#9E9E9E' },
+      textColor: { type: String, trim: true, default: 'rgba(0, 0, 0, 0.87)' },
+      secondaryTextColor: { type: String, trim: true, default: 'rgba(0, 0, 0, 0.87)' },
+      alternateTextColor: { type: String, trim: true, default: '#ffffff' },
+      canvasColor: { type: String, trim: true, default: '#ffffff' },
+      borderColor: { type: String, trim: true, default: '#E0E0E0' },
+      disabledColor: { type: String, trim: true, default: 'rgba(0, 0, 0, .3)' },
+      pickerHeaderColor: { type: String, trim: true, default: '#00BCD4' },
+      clockCircleColor: { type: String, trim: true, default: 'rgba(0, 0, 0, .7)' },
+      shadowColor: { type: String, trim: true, default: 'rgba(0, 0, 0, 1)' }
+    }
+  },
+  productStyle: {
+    values: {
+      descriptionColor: { type: String, trim: true },
+      detailColor: { type: String, trim: true },
+      flex: { type: String, trim: true, default: '1 1 auto' },
+      nameColor: { type: String, trim: true },
+      nameTextShadow: { type: String, trim: true },
+      margin: { type: String, trim: true, default: '16px' },
+    }
+  },
+  theme: {
+    values: {
+      fontFamily: { type: String, trim: true, default: 'Roboto, sans-serif' },
+    }
+  },
+  typography: {
+    values: {
+      h1FontFamily: { type: String, trim: true, default: 'Roboto, sans-serif' },
+      h1FontSize: { type: String, trim: true, default: '45px'},
+      h1FontWeight: { type: String, trim: true, default: '400' },
+      h1LetterSpacing: { type: String, trim: true, default: 'normal' },
+      h1LineHeight: { type: String, trim: true, default: '48px' },
+      h2FontFamily: { type: String, trim: true, default: 'Roboto, sans-serif' },
+      h2FontSize: { type: String, trim: true, default: '34px' },
+      h2FontWeight: { type: String, trim: true, default: '400' },
+      h2LetterSpacing: { type: String, trim: true, default: 'normal' },
+      h2LineHeight: { type: String, trim: true, default: '40px' },
+      h3FontFamily: { type: String, trim: true, default: 'Roboto, sans-serif' },
+      h3FontSize: { type: String, trim: true, default: '24px' },
+      h3FontWeight: { type: String, trim: true, default: '400' },
+      h3LetterSpacing: { type: String, trim: true, default: 'normal' },
+      h3LineHeight: { type: String, trim: true, default: '32px' },
+    }
+  }
+}, {
+  viewStyle: {
+    values: {
+      button1Color: { type: String, trim: true },
+      button2Color: { type: String, trim: true },
+      button1Background: { type: String, trim: true },
+      button2Background: { type: String, trim: true },
+      elevation: { type: Number, trim: true, default: 1 },
+      flex: { type: String, trim: true, default: '1 1 auto' },
+      h1Align: { type: String, trim: true, default: 'center' },
+      h1Color: { type: String, trim: true },
+      h1TextShadow: { type: String, trim: true },
+      h2Align: { type: String, trim: true, default: 'center' },
+      h2Color: { type: String, trim: true },
+      h2TextShadow: { type: String, trim: true },
+      h3Align: { type: String, trim: true, default: 'center' },
+      h3Color: { type: String, trim: true, default: 'rgba(0, 0, 0, .5)' },
+      h3TextShadow: { type: String, trim: true },
+      margin: { type: String, trim: true, default: '16px' },
+      mediaBorder: { type: String, trim: true }
+    }
+  }
+},{
+  timestamps: true
+})
+
+BrandSchema.post('findOneAndRemove', function(doc) {
+  const { appBar, footer } = doc
+  if (appBar.image.src) {
+    deleteFile({ Key: appBar.image.src }).catch(err => console.error(err))
+  }
+  if (footer.image.src) {
+    deleteFile({ Key: footer.image.src }).catch(err => console.error(err))
+  }
+})
+
+const Brand = mongoose.model('Brand', BrandSchema)
+
+export default Brand

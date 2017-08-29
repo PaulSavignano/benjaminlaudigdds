@@ -1,0 +1,201 @@
+/* Body */
+body {
+  margin: 0;
+}
+
+.section-margin {
+  margin: 8px;
+}
+
+.vertical-card {
+  flex: 1 1 auto;
+  margin: 16px 8px;
+}
+
+.card-text {
+  padding: 0 8px;
+}
+
+.page {
+  min-height: 85vh;
+  max-width: 1044px;
+  margin: 0 auto;
+  padding: 24px 0;
+}
+
+
+svg {
+  fill: inherit !important;
+}
+
+
+
+
+
+
+
+
+.background-image {
+  background-position: center center !important;
+  background-repeat:  no-repeat !important;
+  background-size:  cover !important;
+  transition: all 600ms ease-in-out !important;
+}
+
+
+/* Footer */
+.social-media {
+  display: flex;
+  justify-content: center;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+
+
+
+
+
+.field-container {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 8px
+}
+
+.field {
+  flex: 1 1 auto;
+  margin: 0 8px;
+}
+
+
+
+
+
+
+
+/* Buttons */
+.button-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-end;
+}
+.button {
+  flex: 1 1 auto;
+  margin: 8px;
+}
+.delete-button > button {
+  background-color: rgba(213, 0, 0, 1) !important;
+  color: #ffffff !important;
+}
+.delete-button * {
+  color: #ffffff !important;
+}
+.delete-button > button:hover  {
+  background-color: rgba(213, 0, 0, 0.5) !important;
+}
+
+
+
+
+
+
+.error {
+  font-weight: bold;
+  color: rgb(244, 67, 54);
+  margin: 8px;
+}
+
+
+h1 {
+  margin: 16px 16px 8px;
+}
+h2, h3 {
+  margin: 8px 16px;
+}
+p {
+    margin: 8px 16px 24px;
+}
+
+
+
+
+
+
+
+.fa.fa-shopping-cart {
+  font-size: 20px !important;
+}
+
+
+
+
+
+
+
+
+
+/* Image Transistions */
+.image-appear {
+  opacity: 0;
+}
+.image-appear.image-appear-active {
+  opacity: 1;
+  transition: opacity 600s ease-in;
+}
+
+
+
+
+/* Credit Card */
+.credit-card-list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0;
+}
+.credit-card-list li {
+  float: left;
+  color: #aaa;
+  font-size: 26px;
+}
+.credit-card-list li:not(:last-child) {
+  margin-right: 8px;
+}
+ .active {
+  color: #666;
+}
+.alert {
+  margin-top: 24px;
+}
+.credit-card-list h5 {
+  margin-top: 0px;
+}
+.exp-cvc {
+  margin-bottom: 8px;
+  span:first-child { margin-right: 16px; }
+}
+
+
+
+
+
+
+
+
+
+
+.RichTextEditor__root___2QXK- {
+  background: none !important;
+}
+
+
+
+.slide-enter {
+  opacity: 0;
+}
+.slide-enter.slide-enter-active {
+  opacity: 1;
+  transition: opacity 600ms ease-in;
+}
