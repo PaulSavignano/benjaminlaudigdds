@@ -10,40 +10,50 @@ import HeaderCartIcon from './HeaderCartIcon'
 import { toggleDrawer } from '../../actions/drawer'
 
 class DrawerNavigation extends Component {
-  handleSignout = () => {
+  handleNavToAdminBrand = () => {
     const { dispatch } = this.props
     dispatch(toggleDrawer())
-    dispatch(push('/user/signin'))
+    dispatch(push(`/admin/brand`))
   }
-  handleProfile = () => {
-    const { dispatch } = this.props
-    dispatch(toggleDrawer())
-    dispatch(push('/user/profile'))
-  }
-  handleSignin = () => {
-    const { dispatch } = this.props
-    dispatch(toggleDrawer())
-    dispatch(push('/user/profile'))
-  }
-  handleSignup = () => {
-    const { dispatch } = this.props
-    dispatch(toggleDrawer())
-    dispatch(push('/user/signup'))
-  }
-  handleAdminPages = () => {
-    const { dispatch } = this.props
-    dispatch(toggleDrawer())
-    dispatch(push(`/admin/pages`))
-  }
-  handleAdminOrders = () => {
+  handleNavToAdminOrders = () => {
     const { dispatch } = this.props
     dispatch(toggleDrawer())
     dispatch(push(`/admin/orders`))
   }
-  handleAdminBrand = () => {
+  handleNavToAdminPages = () => {
     const { dispatch } = this.props
     dispatch(toggleDrawer())
-    dispatch(push(`/admin/brand`))
+    dispatch(push(`/admin/pages`))
+  }
+  handleNavToAdminUsers = () => {
+    const { dispatch } = this.props
+    dispatch(toggleDrawer())
+    dispatch(push(`/admin/users`))
+  }
+  handleNavToProfile = () => {
+    const { dispatch } = this.props
+    dispatch(toggleDrawer())
+    dispatch(push('/user/profile'))
+  }
+  handleNavToSignin = () => {
+    const { dispatch } = this.props
+    dispatch(toggleDrawer())
+    dispatch(push('/user/profile'))
+  }
+  handleNavToSignout = () => {
+    const { dispatch } = this.props
+    dispatch(toggleDrawer())
+    dispatch(push('/user/signin'))
+  }
+  handleNavToSignup = () => {
+    const { dispatch } = this.props
+    dispatch(toggleDrawer())
+    dispatch(push('/user/signup'))
+  }
+  handleNavToCart = () => {
+    const { dispatch } = this.props
+    dispatch(toggleDrawer())
+    dispatch(push('/user/cart'))
   }
   render() {
     const {
@@ -52,6 +62,7 @@ class DrawerNavigation extends Component {
       dispatch,
       firstName,
       isAdmin,
+      isOwner,
       pages
     } = this.props
     const adminPages = pages.map(page => (
@@ -81,10 +92,15 @@ class DrawerNavigation extends Component {
             <ListItem
               key={1}
               primaryText="Brand"
-              onTouchTap={this.handleAdminBrand}
+              onTouchTap={this.handleNavToAdminBrand}
             />,
             <ListItem
               key={2}
+              primaryText="Orders"
+              onTouchTap={this.handleNavToAdminOrders}
+            />,
+            <ListItem
+              key={3}
               primaryText="Pages"
               initiallyOpen={true}
               primaryTogglesNestedList={true}
@@ -93,30 +109,32 @@ class DrawerNavigation extends Component {
                 <ListItem
                   key={1}
                   primaryText="Edit Pages"
-                  onTouchTap={this.handleAdminPages}
+                  onTouchTap={this.handleNavToAdminPages}
                 />
               ]}
             />,
-            <ListItem
-              key={3}
-              primaryText="Orders"
-              onTouchTap={this.handleAdminOrders}
-            />
+            isOwner ?
+              <ListItem
+                key={4}
+                primaryText="Users"
+                onTouchTap={this.handleNavToAdminUsers}
+              />
+            : null
           ]}
         />
         }
         {firstName ?
           <div>
-            <MenuItem primaryText="Sign out" onTouchTap={this.handleSignout}/>
-            <MenuItem primaryText="Profile" onTouchTap={this.handleProfile}/>
+            <MenuItem primaryText="Sign out" onTouchTap={this.handleNavToSignout}/>
+            <MenuItem primaryText="Profile" onTouchTap={this.handleNavToProfile}/>
           </div>
         :
         <div>
           <MenuItem primaryText="Sign in"
-            onTouchTap={this.handleSignin}
+            onTouchTap={this.handleNavToSignin}
           />
           <MenuItem primaryText="Sign up"
-            onTouchTap={this.handleSignup}/>
+            onTouchTap={this.handleNavToSignup}/>
         </div>
         }
         {cartQty &&
@@ -124,6 +142,7 @@ class DrawerNavigation extends Component {
             cartQty={cartQty}
             dispatch={dispatch}
             color={color}
+            onNavToCart={this.handleNavToCart}
           />
         }
       </div>

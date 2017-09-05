@@ -1,32 +1,32 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { reduxForm, Field } from 'redux-form'
+import { reduxForm } from 'redux-form'
 import { Card, CardTitle } from 'material-ui/Card'
-import MenuItem from 'material-ui/MenuItem'
 
 import ImageForm from '../images/ImageForm'
+import BrandFormField from './BrandFormField'
 import SuccessableButton from '../../components/buttons/SuccessableButton'
-import renderSelectField from '../../components/fields/renderSelectField'
-import renderTextField from '../../components/fields/renderTextField'
+
 import { fetchUpdate } from '../../actions/brand'
 
 class BrandForm extends Component {
   state = {
     imageEdit: false,
+    path: null
   }
   handleImageEdit = (bool) => {
     this.setState({ imageEdit: bool })
     setTimeout(() => window.dispatchEvent(new Event('resize')), 10)
   }
   handleImageRemove = (image) => {
-    const { dispatch, fetchUpdate, editItem: { item: { _id }}} = this.props
+    const { path } = this.state
+    const { dispatch } = this.props
     this.setState({ imageEdit: false })
-    return dispatch(fetchUpdate(_id, { type: 'DELETE_IMAGE', image }))
+    return dispatch(fetchUpdate(path, { type: 'DELETE_IMAGE', image }))
   }
   handleFormSubmit = (values) => {
-    const { imageEdit } = this.state
+    const { imageEdit, path } = this.state
     const { _id, dispatch, form, image } = this.props
-    const path = `${form.toLowerCase()}/${_id}`
     const oldImageSrc = image && image.src ? image.src : null
     const newImage = imageEdit ? this.imageEditor.handleSave() : null
     if (imageEdit) {
@@ -41,6 +41,11 @@ class BrandForm extends Component {
   }
   handleNumberToString = value => {
     if (value) return value.toString()
+  }
+  componentWillMount() {
+    const { _id, form } = this.props
+    const path = `${form.toLowerCase()}/${_id}`
+    this.setState({ path })
   }
   setImageFormRef = (imageEditor) => this.imageEditor = imageEditor
   render() {
@@ -63,7 +68,7 @@ class BrandForm extends Component {
         style={{ backgroundColor, fontFamily, margin: '48px 0' }}
       >
         <form
-          onSubmit={handleSubmit(values => this.handleFormSubmit(values))}
+          onSubmit={handleSubmit(this.handleFormSubmit)}
         >
           <CardTitle title={`${form}`} />
           {image &&
@@ -78,38 +83,15 @@ class BrandForm extends Component {
             />
           }
           <div className="field-container">
-            {fields.map(({ name, type, options }) => {
-              const normalizeNumber = type === 'number' ? { normalize: this.handleNumberToString() } : null
-              return (
-                type === 'select' ?
-                  <Field
-                    key={name}
-                    name={name}
-                    component={renderSelectField}
-                    label={name}
-                    className="field"
-                  >
-                    {options.map(option => (
-                      <MenuItem
-                        key={option}
-                        value={option}
-                        primaryText={option}
-                      />
-                    ))}
-                  </Field>
-                :
-                <Field
-                  key={name}
-                  name={name}
-                  label={name}
-                  type={type}
-                  component={renderTextField}
-                  className="field"
-                  style={{ fontFamily }}
-                  {...normalizeNumber}
-                />
-              )
-            })}
+            {fields.map(({ name, options, type }) => (
+              <BrandFormField
+                key={name}
+                fontFamily={fontFamily}
+                name={name}
+                options={options}
+                type={type}
+              />
+            ))}
           </div>
           {error && <div className="error">{error}</div>}
           <div className="button-container">

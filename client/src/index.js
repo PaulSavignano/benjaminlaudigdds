@@ -12,7 +12,8 @@ import { fetchBrand } from './actions/brand'
 import { fetchCart } from './actions/cart'
 import { fetchOrders } from './actions/orders'
 import { fetchPages } from './actions/pages'
-import { fetchUser } from './actions/users'
+import { fetchProducts } from './actions/products'
+import { fetchUser } from './actions/user'
 
 const store = configureStore()
 const history = syncHistoryWithStore(browserHistory, store)
@@ -30,6 +31,7 @@ if (cart) {
 
 store.dispatch(fetchBrand())
 store.dispatch(fetchPages())
+store.dispatch(fetchProducts())
 
 ReactDOM.render(
   <Provider store={store}>

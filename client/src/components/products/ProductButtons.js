@@ -32,7 +32,7 @@ class ProductButtons extends Component {
     return (
       <div>
         <form
-          onSubmit={handleSubmit(values => this.handleFormSubmit(values))}
+          onSubmit={handleSubmit(this.handleFormSubmit)}
         >
           <div style={{ display: 'flex', flexFlow: 'row nowrap', alignItems: 'center', marginBottom: 8 }}>
             <RaisedButton label="-" primary={true} onTouchTap={this.minus} labelStyle={{ fontSize: '24px' }} />
