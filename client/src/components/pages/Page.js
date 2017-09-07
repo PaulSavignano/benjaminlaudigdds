@@ -18,10 +18,13 @@ class Page extends Component {
     }
     window.scrollTo(0, 0)
   }
-  componentWillReceiveProps(nextProps, nextState) {
-    const { hash } = nextProps
-    if (hash !== '') {
-      return this.scrollToId(hash)
+  componentWillReceiveProps({ pathname, hash }, nextState) {
+    if (pathname !== this.props.pathname) {
+      if (hash !== '') {
+        this.scrollToId(hash)
+      } else {
+        window.scrollTo(0, 0)
+      }
     }
   }
   componentWillUnmount() {
