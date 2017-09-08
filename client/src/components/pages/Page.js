@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 
 import pageContainer from '../../containers/pages/pageContainer'
 import renderSections from './renderSections'
-import Section from '../sections/Section'
-import SwipeableSection from '../sections/SwipeableSection'
 
 class Page extends Component {
   state = {
