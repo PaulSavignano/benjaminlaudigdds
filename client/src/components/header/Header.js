@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { push } from 'react-router-redux'
+import { Link } from 'react-router-dom'
 import AppBar from 'material-ui/AppBar'
 import Drawer from 'material-ui/Drawer'
 import Paper from 'material-ui/Paper'
 
+import './header.css'
 import headerContainer from '../../containers/header/headerContainer'
 import HeaderBrand from './HeaderBrand'
 import SearchBar from '../../components/search/SearchBar'
@@ -14,12 +15,6 @@ import { toggleDrawer } from '../../actions/drawer'
 
 class Header extends Component {
   handleDrawerToggle = () => this.props.dispatch(toggleDrawer())
-  handleDrawerNavigation = () => {
-    const { dispatch } = this.props
-    dispatch(toggleDrawer())
-    return dispatch(push('/'))
-  }
-  handleAppBarNavigation = () => this.props.dispatch(push('/'))
   render() {
     const {
       brand: {
@@ -52,13 +47,8 @@ class Header extends Component {
                   navColor={navColor}
                 />
               :
-              <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
-                <div
-                  style={{ cursor: 'pointer' }}
-                  onTouchTap={this.handleAppBarNavigation}
-                >
-                  <HeaderBrand item={appBar} />
-                </div>
+              <div className="appbar">
+                <HeaderBrand item={appBar} />
                 <AppBarNavigation
                   cartQty={cartQty}
                   color={navColor}
@@ -67,7 +57,6 @@ class Header extends Component {
                   fontFamily={fontFamily}
                   pages={pages}
                   pathname={pathname}
-                  push={push}
                   search={search}
                 />
               </div>
@@ -75,10 +64,12 @@ class Header extends Component {
             </nav>
           }
         />
-        <Drawer docked={false} open={drawer.open} onRequestChange={() => dispatch(toggleDrawer()) }>
+        <Drawer docked={false} open={drawer.open} onRequestChange={this.handleDrawerToggle}>
           <Paper
-            style={{ backgroundColor, fontSize: 24, height: 64, paddingLeft: 16, cursor: 'pointer', display: 'flex' }}
-            onTouchTap={this.handleDrawerNavigation}
+            className="drawer-brand"
+            style={{ backgroundColor }}
+            zDepth={backgroundColor === 'transparent' ? 0 : 1}
+            onTouchTap={this.handleDrawerToggle}
           >
             <HeaderBrand item={appBar} />
           </Paper>
@@ -89,7 +80,6 @@ class Header extends Component {
             isAdmin={isAdmin}
             isOwner={isOwner}
             pages={pages}
-            push={push}
             cartQty={cartQty}
             color={navColor}
           />

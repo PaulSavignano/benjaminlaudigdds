@@ -7,18 +7,38 @@ const P = ({
   children,
   className,
   fontFamily,
-  textColor
+  textColor,
+  typography: {
+    values: {
+      pFontFamily,
+      pFontSize,
+      pFontWeight,
+      pLetterSpacing,
+      pLineHeight
+    }
+  }
 }) => (
   <div
     style={{
       color: textColor,
-      fontFamily,
-      overflow: 'hidden'
+      fontFamily: fontFamily || pFontFamily,
+      fontSize: pFontSize,
+      fontWeight: pFontWeight,
+      letterSpacing: pLetterSpacing,
+      lineHeight: pLineHeight,
+      overflow: 'hidden',
     }}
     {...className}
   >
     {children}
   </div>
 )
+
+P.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+  fontFamily: PropTypes.string,
+  textColor: PropTypes.string,
+}
 
 export default typographyContainer(P)

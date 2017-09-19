@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import { CSSTransitionGroup } from 'react-transition-group'
-import renderHTML from 'react-render-html'
-import { Card, CardMedia, CardText } from 'material-ui/Card'
 import RaisedButton from 'material-ui/RaisedButton'
 
+import './section.css'
 import slideShowContainer from '../../containers/sections/slideShowContainer'
-import AdminSectionAdd from './AdminSectionAdd'
+import AdminSectionButtons from './AdminSectionButtons'
 import renderAdminComponents from './renderAdminComponents'
 import { startEdit } from '../../actions/editItem'
 
@@ -50,43 +48,34 @@ class SlideShow extends Component {
   }
   render() {
     const {
-      autoplay,
       dispatch,
-      item: {
-        _id,
-        items
-      },
+      item,
       pageId,
       pageSlug,
       propsForParent,
       propsForChild,
     } = this.props
     return (
-      <section {...propsForParent}>
-        <CSSTransitionGroup
-          transitionName="cross-fade"
-          transitionEnter={true}
-          transitionEnterTimeout={2000}
-          transitionLeave={true}
-          transitionLeaveTimeout={2000}
-          {...propsForChild}
-        >
-          {renderAdminComponents({ components: items })[this.state.index]}
-        </CSSTransitionGroup>
-        <div style={{ display: 'flex', position: 'absolute', bottom: 8, right: 8 }}>
-          <AdminSectionAdd
-            dispatch={dispatch}
-            pageId={pageId}
-            pageSlug={pageSlug}
-            sectionId={_id}
-          />
-          <RaisedButton
-            label="Edit Section"
-            onTouchTap={this.handleStartEdit}
-            style={{ margin: 8 }}
-          />
-        </div>
-      </section>
+      <div className="admin-section">
+        <section {...propsForParent}>
+          <CSSTransitionGroup
+            transitionName="cross-fade"
+            transitionEnter={true}
+            transitionEnterTimeout={2000}
+            transitionLeave={true}
+            transitionLeaveTimeout={2000}
+            {...propsForChild}
+          >
+            {renderAdminComponents({ components: item.items })[this.state.index]}
+          </CSSTransitionGroup>
+        </section>
+        <AdminSectionButtons
+          dispatch={dispatch}
+          item={item}
+          pageId={pageId}
+          pageSlug={pageSlug}
+        />
+      </div>
     )
   }
 }

@@ -1,40 +1,28 @@
-/* Body */
+svg {
+  fill: inherit !important;
+}
 body {
   margin: 0;
 }
-
 main {
-  min-height: 80vh;
+  min-height: 85vh;
 }
-
-.section-margin {
-  margin: 8px;
+h1, h2, h3, p {
+  margin: 0;
 }
-
-.vertical-card {
-  flex: 1 1 auto;
-  margin: 16px 8px;
-}
-
-.card-text {
-  padding: 0 8px;
-}
-
 .page {
   min-height: 85vh;
   max-width: 1044px;
   margin: 0 auto;
-  padding: 24px 0;
+  padding: 32px 0
+}
+.section {
+  position: relative;
 }
 
-.card {
-  margin: 16px 8px;
+.form {
+  margin: 16px
 }
-
-svg {
-  fill: inherit !important;
-}
-
 
 
 
@@ -52,31 +40,18 @@ svg {
 }
 
 
-/* Footer */
-footer {
-  margin-top: 32px;
-}
-.social-media {
-  display: flex;
-  justify-content: center;
-}
-a {
-  text-decoration: none;
-  color: inherit;
-}
 
 
 
 
 
 
-
+/* Fields */
 .field-container {
   display: flex;
   flex-flow: row wrap;
-  padding: 8px
+  padding: 16px
 }
-
 .field {
   flex: 1 1 auto;
   margin: 0 8px;
@@ -91,6 +66,11 @@ a {
   width: auto !important;
   margin: 0 8px;
 }
+.date {
+  display: flex;
+  align-items: flex-end;
+}
+
 
 
 
@@ -124,34 +104,14 @@ a {
 
 
 
+
+
+
 .error {
   font-weight: bold;
   color: rgb(244, 67, 54);
-  margin: 8px;
-}
-
-
-h1 {
-  margin: 16px 16px 8px;
-}
-h2, h3 {
   margin: 8px 16px;
 }
-p {
-    margin: 8px 16px 24px;
-}
-
-
-
-
-
-
-
-.fa.fa-shopping-cart {
-  font-size: 20px !important;
-}
-
-
 
 
 
@@ -165,51 +125,7 @@ p {
 }
 .fadein-appear.fadein-appear-active {
   opacity: 1;
-  transition: opacity 500s ease-in;
-}
-
-
-
-
-/* Credit Card */
-.credit-card-list {
-  list-style: none;
-  padding: 0;
-  margin: 16px 0;
-}
-.credit-card-list li {
-  float: left;
-  color: #aaa;
-  font-size: 26px;
-}
-.credit-card-list li:not(:last-child) {
-  margin-right: 8px;
-}
- .active {
-  color: #666;
-}
-.alert {
-  margin-top: 24px;
-}
-.credit-card-list h5 {
-  margin-top: 0px;
-}
-.exp-cvc {
-  margin-bottom: 8px;
-  span:first-child { margin-right: 16px; }
-}
-
-
-
-
-
-
-
-
-
-
-.RichTextEditor__root___2QXK- {
-  background: none !important;
+  transition: opacity 300ms ease-in;
 }
 
 
@@ -221,7 +137,6 @@ p {
   opacity: 0;
   transition: opacity 2s ease-in;
 }
-
 .cross-fade-enter {
   opacity: 0;
 }

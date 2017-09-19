@@ -1,21 +1,21 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { push } from 'react-router-redux'
+import { Link } from 'react-router-dom'
 import MenuItem from 'material-ui/MenuItem'
 
 class AppBarSectionLink extends Component {
-  handleSectionNavigation = () => {
-    const { dispatch, link, onCloseMenu, page } = this.props
-    onCloseMenu()
-    return dispatch(push(`/${page.slug}#${link.values.pageLink}`))
-  }
   render() {
-    const { link, page } = this.props
+    const {
+      link: { values: { pageLink }},
+      onCloseMenu,
+      page
+    } = this.props
     return (
       <MenuItem
-        key={link._id}
-        primaryText={link.values.pageLink}
-        onTouchTap={this.handleSectionNavigation} />
+        primaryText={pageLink}
+        containerElement={<Link to={`/${page.slug}#${pageLink}`} />}
+        onTouchTap={onCloseMenu}
+      />
     )
   }
 }

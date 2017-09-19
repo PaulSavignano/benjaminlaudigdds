@@ -3,6 +3,7 @@ import crypto from 'crypto'
 import fetch from 'node-fetch'
 
 import Address from '../models/Address'
+import Brand from '../models/Brand'
 import Order from '../models/Order'
 import User from '../models/User'
 import { sendEmail1 } from '../middleware/nodemailer'
@@ -86,28 +87,27 @@ export const get = (req, res) => {
   const { token, user } = req
   const { values, addresses, roles } = user
   const isAdmin = roles.some(role => role === 'admin')
-  const ttl = (1000 * 60 * 60 * 72) // 72 hours
-  const expiredTokens = user.tokens.filter(token => (token.createdAt + ttl) < Date.now())
+  const ttl = (1000 * 60 * 60 * 48) // 48 hours
+  if (token + ttl < Date.now()) {
+    return res.status(400).send('Your token has expired, please sign in again')
+  }
+  const expiredTokens = user.tokens.filter(token => token.createdAt + ttl < Date.now())
   if (expiredTokens.length) {
     user.removeTokens(expiredTokens)
-      .then(() => {
-        res.status(400).send({ error: 'Your token has expired, please sign in again' })
-      })
-      .catch(error => {
-        console.error('removeTokens() error :', error)
-        res.status(401).send({ error })
-      })
-  } else {
-    return user.buildResponse()
-    .then(response => {
-      const { user, users } = response
-      res.send({ user, users })
-    })
     .catch(error => {
-      console.log(error)
-      res.status(400).send()
+      console.error('removeTokens() error :', error)
+      res.status(401).send({ error })
     })
   }
+  return user.buildResponse()
+  .then(response => {
+    const { user, users } = response
+    res.send({ user, users })
+  })
+  .catch(error => {
+    console.log(error)
+    res.status(400).send({ error })
+  })
 }
 
 
@@ -136,14 +136,16 @@ export const update = (req, res) => {
 }
 
 export const adminUpdate = (req, res) => {
-  const { user } = req
+  const {
+    user,
+    params: { _id },
+    body: { values, type }
+  } = req
   const isOwner = user.roles.some(role => role === 'owner')
   if (!isOwner) return res.status(400).send({ error: 'umauthorized'})
-  const { userId } = req.params
-  const { values, type } = req.body
   switch(type) {
     case 'UPDATE_VALUES':
-      return User.findOne({ _id: userId })
+      return User.findOne({ _id })
         .then(user => {
           if (values.password) {
             user.password = values.password
@@ -173,9 +175,8 @@ export const adminUpdate = (req, res) => {
       [ 'admin', 'user' ]
       :
       [ 'user' ]
-      console.log(roles)
       return User.findOneAndUpdate(
-          { _id: userId },
+          { _id },
           { $set: { roles: roles }},
           { new: true }
         )
@@ -201,12 +202,13 @@ export const remove = (req, res) => {
 }
 
 export const adminRemove = (req, res) => {
-  const { user } = req
+  const { user, params: { _id }} = req
   const isOwner = user.roles.some(role => role === 'owner')
   if (!isOwner) return res.status(400).send({ error: 'umauthorized'})
-  const { _id } = req.params
   User.findOneAndRemove({ _id })
-  .then(doc => res.send(user))
+  .then(doc => {
+    res.send(doc)
+  })
   .catch(error => {
     console.error('User.findOneAndRemove: ', error)
     res.status(400).send({ error: 'user delete failed' })
@@ -232,12 +234,12 @@ export const signin = (req, res) => {
     })
     .catch(error => {
       console.error('user.generateAuthToken(): ', error)
-      res.status(400).send({ error })
+      res.status(400).send(error)
     })
   })
   .catch(error => {
     console.error('User.findByCredentials: ', error)
-    res.status(400).send({ error })
+    res.status(400).send(error)
   })
 }
 
@@ -250,40 +252,40 @@ export const recovery = (req, res, next) => {
       resolve(buf.toString('hex'));
     })
   })
-    .then(token => {
-      User.findOne({ 'values.email': email })
-        .then(user => {
-          const path = process.env.ROOT_URL ? `${process.env.ROOT_URL}user/reset/${token}` : `localhost:${process.env.PORT}/user/reset/${token}`
-          if (!user) return Promise.reject({ error: { email: 'User not found' }})
-          const { firstName, email } = user.values
-          user.passwordResetToken = token
-          user.passwordResetExpires = Date.now() + (60 * 60 * 1000)
-          user.save()
-            .then(() => {
-              sendEmail1({
-                to: email,
-                toSubject: 'Reset Password',
-                toBody: `
-                  <p>Hi ${firstName},</p>
-                  <p>Click the link below to recover your password.</p>
-                  <br />
-                  <a href="${path}" style="color: black; text-decoration: none;">
-                    ${path}
-                  </a>
-                  `
-              })
-              res.send({ message: `A password recovery email has been sent to ${email}`})
-            })
-            .catch(error => {
-              console.error(error)
-              res.status(400).send({ error })
-            })
+  .then(token => {
+    User.findOne({ 'values.email': email.toLowerCase() })
+    .then(user => {
+      const path = process.env.ROOT_URL ? `${process.env.ROOT_URL}user/reset/${token}` : `localhost:${process.env.PORT}/user/reset/${token}`
+      if (!user) return Promise.reject({ email: 'User not found.' })
+      const { firstName, email } = user.values
+      user.passwordResetToken = token
+      user.passwordResetExpires = Date.now() + (60 * 60 * 1000)
+      user.save()
+      .then(() => {
+        sendEmail1({
+          to: email,
+          toSubject: 'Reset Password',
+          toBody: `
+            <p>Hi ${firstName},</p>
+            <p>Click the link below to recover your password.</p>
+            <br />
+            <a href="${path}" style="color: black; text-decoration: none;">
+              ${path}
+            </a>
+            `
         })
-        .catch(error => {
-          console.error('User.findOne: ', error)
-          res.status(400).send({ error })
-        })
+        res.send({ message: `A password recovery email has been sent to ${email}.`})
+      })
+      .catch(error => {
+        console.error(error)
+        res.status(400).send({ error })
+      })
     })
+    .catch(error => {
+      console.error('User.findOne: ', error)
+      res.status(400).send({ error })
+    })
+  })
 }
 
 
@@ -292,7 +294,7 @@ export const reset = (req, res) => {
     { passwordResetToken: req.params.token, passwordResetExpires: { $gt: Date.now() }}
   )
   .then(user => {
-    if (!user) return Promise.reject({ error: 'Invalid token' })
+    if (!user) return Promise.reject('Token has expired.')
     user.password = req.body.password
     user.passwordResetToken = undefined
     user.passwordResetExpires = undefined
@@ -336,18 +338,22 @@ export const contact = (req, res) => {
   if (!firstName || !email || !message) {
     return res.status(422).send({ error: 'You must provide all fields' });
   }
-  sendEmail1({
-    to: email,
-    toSubject: `Thank you for contacting ${process.end.APP_NAME}!`,
-    name: firstName,
-    toBody: `<p>Thank you for contacting ${procee.env.APP_NAME}.  We will respond to your request shortly!</p>`,
-    fromSubject: `New Contact Request`,
-    fromBody: `
-      <p>${firstName} just contacted you through ${process.env.APP_NAME}.</p>
-      <div>Email: ${email}</div>
-      <div>Message: ${message}</div>
-    `
-  })
+  Brand.findOne({})
+  .then(brand => {
+    if (!brand) return Promise.reject('brand not found')
+    const { name } = brand.business.values
+    sendEmail1({
+      to: email,
+      toSubject: `Thank you for contacting ${name}!`,
+      name: firstName,
+      toBody: `<p>Thank you for contacting ${name}.  We will respond to your request shortly!</p>`,
+      fromSubject: `New Contact Request`,
+      fromBody: `
+        <p>${firstName} just contacted you through ${process.env.APP_NAME}.</p>
+        <div>Email: ${email}</div>
+        <div>Message: ${message}</div>
+      `
+    })
     .then(info => {
       res.send({ message: 'Thank you for contacting us, we will respond to you shortly!'})
     })
@@ -355,6 +361,8 @@ export const contact = (req, res) => {
       console.error(error)
       res.status(400).send({ error })
     })
+  })
+
 }
 
 

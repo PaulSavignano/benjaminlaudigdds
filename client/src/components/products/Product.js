@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { push } from 'react-router-redux'
 import { Card, CardMedia, CardTitle, CardText } from 'material-ui/Card'
 
+import history from '../../containers/routers/history'
 import productContainer from '../../containers/products/productContainer'
-import loadImage from '../images/loadImage'
 import ProductButtons from './ProductButtons'
 import formatPrice from '../../utils/formatPrice'
+import slugIt from '../../utils/slugIt'
 
 class Product extends Component {
   handleNavigation = () => {
-    const { dispatch, item: { productSlug }} = this.props
-    dispatch(push(`/products/${productSlug}`))
+    const { item: { _id, values: { name }}} = this.props
+    history.push(`/products/${slugIt(name)}/${_id}`)
   }
   render() {
     const {
@@ -21,17 +21,16 @@ class Product extends Component {
       item: {
         _id,
         image,
-        productSlug,
         values: {
           description,
           name,
           price,
         }
       },
+      primary1Color,
       productStyle: {
         values: {
           descriptionColor,
-          detailColor,
           flex,
           nameColor,
           nameTextShadow,
@@ -78,6 +77,7 @@ class Product extends Component {
           dispatch={dispatch}
           form={`addToCard_${_id}`}
           productId={_id}
+          primary1Color={primary1Color}
         />
       </Card>
     )

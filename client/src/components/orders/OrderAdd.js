@@ -1,17 +1,20 @@
 /* global Stripe */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
 import { Field, reduxForm } from 'redux-form'
 import Payment from 'payment'
 import { Card, CardText, CardTitle } from 'material-ui/Card'
 import MenuItem from 'material-ui/MenuItem'
 
+import './orders.css'
 import requireCart from '../../containers/orders/requireCart'
+import validateCheckout from '../../utils/validateCheckout'
 import SuccessableButton from '../buttons/SuccessableButton'
+import DateField from '../fields/DateField'
 import renderTextField from '../fields/renderTextField'
 import renderSelectField from '../fields/renderSelectField'
 import AddressFields from '../addresses/AddressFields'
-import validateCreditCard from '../../utils/validateCreditCard'
 import formatPrice from '../../utils/formatPrice'
 import { fetchAddOrder } from '../../actions/orders'
 
@@ -20,17 +23,19 @@ class OrderAdd extends Component {
     newAddress: false
   }
   handleFormSubmit = (values) => {
-    const { dispatch, cart } = this.props
-    return dispatch(fetchAddOrder({ ...values, cart }))
+    const { dispatch, cart, history } = this.props
+    return dispatch(fetchAddOrder({ values, cart, history }))
   }
   render() {
     const {
+      addresses,
+      cart,
+      dirty,
       error,
       handleSubmit,
-      cart,
-      addresses,
+      submitSucceeded,
       submitting,
-      submitSucceeded
+      valid
     } = this.props
     return (
       <div className="page">
@@ -61,9 +66,8 @@ class OrderAdd extends Component {
                 <Field
                   name="exp"
                   label="Card Expiration"
-                  className="field"
-                  component={renderTextField}
-                  onFocus={e => Payment.formatCardExpiry(e.target)}
+                  className="field date"
+                  component={DateField}
                 />
                 <Field
                   name="cvc"
@@ -73,13 +77,12 @@ class OrderAdd extends Component {
                   onFocus={e => Payment.formatCardCVC(e.target)}
 
                 />
-              </div>
-              <CardText>
                 <Field
                   name="fullAddress"
                   component={renderSelectField}
                   label="Address"
                   fullWidth={true}
+                  className="field"
                 >
                   {addresses.map(address => (
                     <MenuItem
@@ -97,20 +100,28 @@ class OrderAdd extends Component {
                   ))}
                   <MenuItem value="newAddress" primaryText="Enter new address" onTouchTap={() => this.setState({ newAddress: true })} />
                 </Field>
-              </CardText>
+              </div>
               {this.state.newAddress && <AddressFields />}
-              {error && <div className="error">{error}</div>}
-              <CardText>
-                <h2 style={{ textAlign: 'right '}}>Subtotal {formatPrice(cart.subTotal)}</h2>
-                <h2 style={{ textAlign: 'right '}}>Tax {(cart.tax * 100).toFixed(2)}%</h2>
-                <h2 style={{ textAlign: 'right '}}>Total {formatPrice(cart.total)}</h2>
-              </CardText>
-              <div style={{ display: 'flex' }}>
+              <CardTitle
+                title={
+                  <div>
+                    <div>Subtotal {formatPrice(cart.total)}</div>
+                    <div>Tax {(cart.tax * 100).toFixed(2)}</div>
+                    <div>Total {formatPrice(cart.total)}</div>
+                  </div>
+                }
+                titleStyle={{ textAlign: 'right' }}
+              />
+              <div className="button-container">
                 <SuccessableButton
+                  dirty={dirty}
+                  error={error}
+                  label="Place Order"
+                  reset={null}
                   submitSucceeded={submitSucceeded}
                   submitting={submitting}
-                  label="PLACE ORDER"
-                  successLabel="ORDER PLACED!"
+                  successLabel="Order Placed!"
+                  valid={valid}
                 />
               </div>
             </form>
@@ -122,16 +133,17 @@ class OrderAdd extends Component {
 }
 
 OrderAdd.propTypes = {
-  error: PropTypes.string,
-  dispatch: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  cart: PropTypes.object.isRequired,
   addresses: PropTypes.array,
+  cart: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  error: PropTypes.string,
+  handleSubmit: PropTypes.func.isRequired,
+  submitSucceeded: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
-  submitSucceeded: PropTypes.bool.isRequired
+  valid: PropTypes.bool.isRequired
 }
 
 export default requireCart(reduxForm({
   form: 'CheckoutForm',
-  validate: validateCreditCard,
-})(OrderAdd))
+  validate: validateCheckout
+})(withRouter(OrderAdd)))

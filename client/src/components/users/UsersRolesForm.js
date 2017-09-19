@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { reduxForm, Field } from 'redux-form'
 import { Card, CardTitle } from 'material-ui/Card'
@@ -16,12 +16,15 @@ const renderCheckbox = ({ input, label, className }) =>
 
 
 const UsersRolesForm = ({
+  dirty,
   dispatch,
   error,
   handleSubmit,
   handleUserRoles,
+  reset,
   submitSucceeded,
-  submitting
+  submitting,
+  valid
 }) => (
   <Card className="UsersRolesForm card">
     <CardTitle title="Roles" />
@@ -46,14 +49,16 @@ const UsersRolesForm = ({
           className="checkbox"
         />
       </div>
-
-      {error && <div className="error">{error}</div>}
       <div className="button-container">
         <SuccessableButton
+          dirty={dirty}
+          error={error}
+          label="Update Roles"
+          reset={reset}
           submitSucceeded={submitSucceeded}
           submitting={submitting}
-          label="update roles"
-          successLabel="roles updated!"
+          successLabel="Roles Updated!"
+          valid={valid}
         />
       </div>
     </form>
@@ -61,13 +66,16 @@ const UsersRolesForm = ({
 )
 
 UsersRolesForm.propTypes = {
+  destroy: PropTypes.func.isRequired,
   dispatch: PropTypes.func.isRequired,
   error: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
   handleUserRoles: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
   submitSucceeded: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  valid: PropTypes.bool.isRequired,
 }
 
-export default reduxForm({})(UsersRolesForm)
+export default reduxForm({ enableReinitialize: true })(UsersRolesForm)

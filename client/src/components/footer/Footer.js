@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import Paper from 'material-ui/Paper'
 import FontIcon from 'material-ui/FontIcon'
 
+import './Footer.css'
 import footerContainer from '../../containers/footer/footerContainer'
 import loadImage from '../images/loadImage'
 

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { push } from 'react-router-redux'
 import { Card, CardText } from 'material-ui/Card'
 import moment from 'moment'
 
+import history from '../../containers/routers/history'
 import formatPrice from '../../utils/formatPrice'
 import OrderCartList from './OrderCartList'
 
@@ -11,11 +11,11 @@ class OrderItem extends Component {
   state = {
     elevation: 1,
   }
-  handleMouseEnter = () => this.setState({ elevation: 4 })
+  handleMouseEnter = () => this.setState({ elevation: 3 })
   handleMouseLeave = () => this.setState({ elevation: 1 })
   handleNavigation = () => {
-    const { dispatch, order: { _id }} = this.props
-    dispatch(push(`/user/orders/${_id}`))
+    const { order: { _id }} = this.props
+    return history.push(`/user/orders/${_id}`)
   }
   render() {
     const {
@@ -34,6 +34,7 @@ class OrderItem extends Component {
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
         onTouchTap={this.handleNavigation}
+        className="card"
       >
         <CardText style={{ display: 'flex', flexFlow: 'row wrap', justifyContent: 'space-between' }}>
           <div>

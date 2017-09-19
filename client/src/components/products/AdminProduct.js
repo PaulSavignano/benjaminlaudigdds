@@ -6,7 +6,6 @@ import RaisedButton from 'material-ui/RaisedButton'
 
 import productContainer from '../../containers/products/productContainer'
 import formatPrice from '../../utils/formatPrice'
-import { fetchUpdate, fetchDelete } from '../../actions/products'
 import { startEdit } from '../../actions/editItem'
 
 class AdminProduct extends Component {
@@ -17,7 +16,6 @@ class AdminProduct extends Component {
   }
   render() {
     const {
-      dispatch,
       elevation,
       events,
       item: {
@@ -25,7 +23,6 @@ class AdminProduct extends Component {
         image,
         values: {
           description,
-          detail,
           name,
           price,
         }
@@ -33,7 +30,6 @@ class AdminProduct extends Component {
       productStyle: {
         values: {
           descriptionColor,
-          detailColor,
           flex,
           nameColor,
           nameTextShadow,
@@ -78,12 +74,9 @@ class AdminProduct extends Component {
         </CardText>
         <div style={{ display: 'flex', flexFlow: 'row nowrap', alignItems: 'center', marginBottom: 8 }}>
           <RaisedButton label="-" primary={true} labelStyle={{ fontSize: '24px' }} />
-          <TextField
-            style={{ flex: '1 1 auto' }}
-            inputStyle={{ textAlign: 'center' }}
-            value="1"
-            id={_id}
-          />
+          <div style={{ flex: '1 1 auto', textAlign: 'center', borderBottom: '1px solid rgb(224, 224, 224)' }}>
+            1
+          </div>
           <RaisedButton label="+" primary={true} labelStyle={{ fontSize: '24px' }} />
         </div>
         <RaisedButton

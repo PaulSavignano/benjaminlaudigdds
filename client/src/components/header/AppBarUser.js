@@ -1,45 +1,35 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { push } from 'react-router-redux'
+import { Link, withRouter } from 'react-router-dom'
 import FlatButton from 'material-ui/FlatButton'
 import Popover, { PopoverAnimationVertical } from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 
 import './header.css'
+import UserButtons from './UserButtons'
 import { fetchSignout } from '../../actions/user'
 
 class AppBarUser extends Component {
   state = {
     anchorEl: null,
-    openMenu: false,
+    horizontal: 'left',
     navClass: null,
+    openMenu: false,
     width: 0,
   }
-  handleOpen = (e) => {
+  handleOpenMenu = (e) => {
     e.preventDefault()
     this.setState({ openMenu: true, anchorEl: e.currentTarget })
   }
+  handleCloseMenu = () => this.setState({ openMenu: false, anchorEl: null })
   handleSignout = () => {
-    const { dispatch } = this.props
-    this.setState({ openMenu: false })
-    dispatch(push('/user/signin'))
-    return dispatch(fetchSignout())
-  }
-  handleProfile = () => {
-    this.setState({ openMenu: false })
-    return this.props.dispatch(push('/user/profile'))
-  }
-  handleSignin = () => {
-    this.setState({ openMenu: false })
-    return this.props.dispatch(push('/user/signin'))
-  }
-  handleSignup = () => {
-    this.setState({ openMenu: false })
-    return this.props.dispatch(push('/user/signup'))
+    const { dispatch, history } = this.props
+    this.handleCloseMenu()
+    return dispatch(fetchSignout(history))
   }
   componentDidMount() {
+    const { cartQty } = this.props
     const width = this.userNav.clientWidth
     const totalWidth = width/.2
     let navClass
@@ -62,47 +52,45 @@ class AppBarUser extends Component {
       default:
         navClass = 'largerThan1920'
     }
-    this.setState({ navClass, width })
+    const horizontal = cartQty > 0 ? 'left' : 'right'
+    this.setState({ horizontal, navClass, width })
+  }
+  componentWillReceiveProps({ cartQty }) {
+    if (cartQty !== this.props.cartQty) {
+      const horizontal = cartQty > 0 ? 'left' : 'right'
+      this.setState({ horizontal })
+    }
   }
   render() {
-    const { navClass } = this.state
-    const { color, firstName, fontFamily } = this.props
+    const { horizontal, navClass } = this.state
+    const { dispatch, color, firstName, fontFamily } = this.props
     return (
       <div
         ref={ (userNav) => this.userNav = userNav}
-        style={{ fontFamily }}
+        style={{ fontFamily, display: 'flex', alignItems: 'center' }}
         className={navClass}
       >
         <FlatButton
-          onTouchTap={this.handleOpen}
+          onTouchTap={this.handleOpenMenu}
           label={firstName ? `Hello, ${firstName}`: `SIGN IN`}
-          labelStyle={{ padding: '0 0 0 4px' }}
+          labelStyle={{ padding: 0 }}
           hoverColor="none"
-          style={{ color, fontFamily, minWidth: 'none', margin: '0 0 0 8px' }}
+          style={{ color, fontFamily, minWidth: 'none', margin: '0 0 0 24px' }}
         />
         <Popover
           open={this.state.openMenu}
           anchorEl={this.state.anchorEl}
-          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'left', vertical: 'top'}}
-          onRequestClose={() => this.setState({ openMenu: false })}
+          anchorOrigin={{ horizontal, vertical: 'bottom'}}
+          targetOrigin={{ horizontal, vertical: 'top'}}
+          onRequestClose={this.handleCloseMenu}
           animation={PopoverAnimationVertical}
         >
           <Menu>
-            {firstName ?
-              <div>
-                <MenuItem primaryText="Sign out" onTouchTap={this.handleSignout}/>
-                <MenuItem primaryText="Profile" onTouchTap={this.handleProfile}/>
-              </div>
-            :
-            <div>
-              <MenuItem primaryText="Sign in"
-                onTouchTap={this.handleSignin}
-              />
-              <MenuItem primaryText="Sign up"
-                onTouchTap={this.handleSignup}/>
-            </div>
-            }
+            <UserButtons
+              dispatch={dispatch}
+              firstName={firstName}
+              onSelect={this.handleCloseMenu}
+            />
           </Menu>
         </Popover>
       </div>
@@ -117,4 +105,4 @@ AppBarUser.propTypes = {
   fontFamily: PropTypes.string.isRequired
 }
 
-export default AppBarUser
+export default withRouter(AppBarUser)

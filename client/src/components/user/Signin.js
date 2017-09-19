@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { push } from 'react-router-redux'
-import { Link } from 'react-router'
+import { Link, withRouter } from 'react-router-dom'
 import RaisedButton from 'material-ui/RaisedButton'
 import {Card, CardActions, CardTitle, CardText} from 'material-ui/Card'
-import { Field, reduxForm } from 'redux-form'
+import { Field, reduxForm, actions } from 'redux-form'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 
 import userContainer from '../../containers/user/userContainer'
+import SuccessableButton from '../buttons/SuccessableButton'
 import renderTextField from '../../components/fields/renderTextField'
 import { fetchSignin } from '../../actions/user'
 
@@ -32,73 +32,49 @@ class Signin extends Component {
     open: false,
     message: null
   }
-  handleClose = () => {
-    this.setState({open: false})
-    this.props.dispatch(push('/'))
-  }
   handleSignin = values => {
-    const { dispatch } = this.props
-    dispatch(fetchSignin(values))
-  }
-  componentWillReceiveProps(nextProps) {
-    const { submitSucceeded, reset, user } = nextProps
-    if (submitSucceeded) {
-      reset()
-      this.setState({
-        open: true,
-        message: `Welcome back ${user.values.firstName}!`
-      })
-    }
+    const { dispatch, history } = this.props
+    return dispatch(fetchSignin({ history, values }))
   }
   render() {
     const {
+      dirty,
       error,
       handleSubmit,
-      isFetching,
       primary1Color,
-      submitting
+      pristine,
+      reset,
+      submitSucceeded,
+      submitting,
+      user,
+      valid
     } = this.props
     return (
-      isFetching ? null :
       <div className="page">
-        <section className="section-margin">
-          <Card>
+        <section className="section">
+          <Card className="form">
             <CardTitle title="Sign in" subtitle="Enter your information" />
             <form onSubmit={handleSubmit(this.handleSignin)}>
               <CardText>
                 <Field name="email" component={renderTextField} label="Email" fullWidth={true} />
                 <Field name="password" component={renderTextField} label="Password" fullWidth={true} type="password" />
               </CardText>
-              {error && <div className="error">{error}</div>}
-              <CardActions>
-                <RaisedButton
+              <div className="button-container">
+                <SuccessableButton
+                  dirty={dirty}
+                  error={error}
                   label="Sign In"
-                  fullWidth={true}
-                  disabled={submitting}
-                  type="submit"
-                  primary={true}
+                  reset={null}
+                  submitSucceeded={submitSucceeded}
+                  submitting={submitting}
+                  successLabel={`Welcome ${user.values.firstName}!`}
+                  valid={valid}
                 />
-              </CardActions>
+              </div>
             </form>
-            {!this.state.open ? null :
-            <Dialog
-              actions={
-                <FlatButton
-                  label="Close"
-                  primary={true}
-                  onTouchTap={this.handleClose}
-                />
-              }
-              modal={false}
-              open={this.state.open}
-              onRequestClose={this.handleClose}
-            >
-              {this.state.message}
-            </Dialog>
-            }
-            <CardActions style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
-              <p>Don't have an account? <Link to="/user/signup" style={{ color: primary1Color }}>Sign up instead!</Link></p>
-              <p><Link to="/user/recovery" style={{ color: primary1Color }}>Forgot your password?</Link></p>
+            <CardActions className="card-actions">
+              <p>Don't have an account? <Link to="/user/signup" style={{ color: primary1Color }}>Sign Up!</Link></p>
+              <p>Forgot your password? <Link to="/user/recovery" style={{ color: primary1Color }}>Recover your account!</Link></p>
             </CardActions>
           </Card>
         </section>
@@ -108,13 +84,17 @@ class Signin extends Component {
 }
 
 Signin.propTypes = {
+  dirty: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
   error: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
-  isFetching: PropTypes.bool.isRequired,
   primary1Color: PropTypes.string,
   reset: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
 }
 
-export default userContainer(reduxForm({ form: 'signin', validate })(Signin))
+export default userContainer(reduxForm({
+  form: 'signin',
+  validate,
+  destroyOnUnmount: true
+})(withRouter(Signin)))

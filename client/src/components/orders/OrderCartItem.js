@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { push } from 'react-router-redux'
 import { Card } from 'material-ui/Card'
 
+import history from '../../containers/routers/history'
 import loadImage from '../images/loadImage'
 import formatPrice from '../../utils/formatPrice'
 import slugIt from '../../utils/slugIt'
@@ -17,14 +16,12 @@ class OrderCartItem extends Component {
   handleNavigation = (e) => {
     e.stopPropagation()
     const { dispatch, item: { name, productId }} = this.props
-    return dispatch(push(`/products/${slugIt(name)}/${productId}`))
+    return history.push(`/products/${slugIt(name)}/${productId}`)
   }
   render() {
     const {
-      dispatch,
       item: {
         image,
-        productId,
         productQty,
         name,
         price,
@@ -37,7 +34,7 @@ class OrderCartItem extends Component {
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
         onTouchTap={this.handleNavigation}
-        style={{ margin: 16 }}
+        className="card"
       >
         <div style={{ display: 'flex', flexFlow: 'row nowrap' }}>
           {image && image.src && <img src={image.src} alt="" width="auto" height="50px"/>}

@@ -21,6 +21,7 @@ const swipeableContainer = (ComposedComponent) => {
           margin,
           maxWidth,
           minHeight,
+          padding,
           pageLink,
         }
       } = item
@@ -30,6 +31,7 @@ const swipeableContainer = (ComposedComponent) => {
           backgroundImage: image.src && `url(${image.src})`,
           backgroundColor,
           marginTop: containerMarginTop,
+          maxWidth,
           minHeight,
           position: 'relative'
         },
@@ -41,8 +43,8 @@ const swipeableContainer = (ComposedComponent) => {
           display: 'flex',
           flexFlow,
           justifyContent,
-          maxWidth,
-          margin
+          margin,
+          padding
         }
       }
       this.setState({ propsForParent, propsForChild })

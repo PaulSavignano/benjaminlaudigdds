@@ -1,5 +1,7 @@
 import { SubmissionError } from 'redux-form'
 
+import history from '../containers/routers/history'
+
 export const type = 'USERS'
 const route = 'users'
 

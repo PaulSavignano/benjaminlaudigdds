@@ -7,6 +7,7 @@ const H3 = ({
   children,
   className,
   color,
+  margin,
   textAlign,
   textShadow,
   typography: {
@@ -27,6 +28,7 @@ const H3 = ({
       fontWeight: h3FontWeight,
       letterSpacing: h3LetterSpacing,
       lineHeight: h3LineHeight,
+      margin,
       overflow: 'hidden',
       textAlign,
       textShadow,
@@ -36,5 +38,14 @@ const H3 = ({
     {children}
   </h3>
 )
+
+H3.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+  color: PropTypes.string,
+  textAlign: PropTypes.string,
+  textShadow: PropTypes.string,
+  typography: PropTypes.object
+}
 
 export default typographyContainer(H3)

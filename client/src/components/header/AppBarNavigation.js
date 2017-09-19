@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { push } from 'react-router-redux'
+import { Link } from 'react-router-dom'
 import IconButton from 'material-ui/IconButton'
 
 import './header.css'
 import AppBarPageLink from './AppBarPageLink'
 import AppBarUser from './AppBarUser'
-import HeaderCartIcon from './HeaderCartIcon'
+import CartIcon from './CartIcon'
 import { searchToggle } from '../../actions/search'
 
 class AppBarNavigation extends Component {
@@ -44,10 +44,6 @@ class AppBarNavigation extends Component {
     const { dispatch, search } = this.props
     return dispatch(searchToggle(!search.searching))
   }
-  handleNavToCart = () => {
-    const { dispatch } = this.props
-    dispatch(push('/user/cart'))
-  }
   render() {
     const { navClass } = this.state
     const {
@@ -57,8 +53,6 @@ class AppBarNavigation extends Component {
       firstName,
       fontFamily,
       pages,
-      pathname,
-      search,
     } = this.props
     return (
       <div
@@ -76,8 +70,6 @@ class AppBarNavigation extends Component {
               dispatch={dispatch}
               fontFamily={fontFamily}
               page={page}
-              pathname={pathname}
-
             />
           ))}
         </div>
@@ -85,19 +77,22 @@ class AppBarNavigation extends Component {
           iconClassName="fa fa-search"
           iconStyle={{ verticalAlign: 'bottom', fontSize: 16, color }}
           onTouchTap={this.handleSearchToggle}
+          style={{ padding: '12px 0', width: 'auto', margin: '0 0 0 16px'}}
         />
         <AppBarUser
+          cartQty={cartQty}
           color={color}
           dispatch={dispatch}
           firstName={firstName}
           fontFamily={fontFamily}
         />
         {cartQty &&
-          <HeaderCartIcon
+          <CartIcon
             cartQty={cartQty}
             dispatch={dispatch}
             color={color}
-            onNavToCart={this.handleNavToCart}
+            style={{ margin: '0 0 0 24px', padding: 0, width: 40 }}
+            badgeStyle={{ top: 0, left: 9 }}
           />
         }
       </div>
@@ -112,7 +107,6 @@ AppBarNavigation.propTypes = {
   firstName: PropTypes.string,
   fontFamily: PropTypes.string.isRequired,
   pages: PropTypes.array,
-  pathname: PropTypes.string.isRequired,
   search: PropTypes.object
 }
 

@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import RaisedButton from 'material-ui/RaisedButton'
 
+import './page.css'
 import AdminItemForm from '../forms/AdminItemForm'
 import pageContainer from '../../containers/pages/pageContainer'
 import renderAdminSections from './renderAdminSections'
 import { fetchAdd } from '../../actions/sections'
 
 class AdminPage extends Component {
-  componentWillMount() {
+  componentDidMount() {
     window.scrollTo(0,0)
   }
   handleAddSection = () => {
@@ -21,7 +22,7 @@ class AdminPage extends Component {
       page: { _id, slug, sections }
     } = this.props
     return (
-      <div className="page-height">
+      <div className="admin-page">
         <div>
           {renderAdminSections({
             dispatch,

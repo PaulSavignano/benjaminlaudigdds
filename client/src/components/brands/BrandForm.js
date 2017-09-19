@@ -26,7 +26,7 @@ class BrandForm extends Component {
   }
   handleFormSubmit = (values) => {
     const { imageEdit, path } = this.state
-    const { _id, dispatch, form, image } = this.props
+    const { dispatch, image } = this.props
     const oldImageSrc = image && image.src ? image.src : null
     const newImage = imageEdit ? this.imageEditor.handleSave() : null
     if (imageEdit) {
@@ -50,17 +50,18 @@ class BrandForm extends Component {
   setImageFormRef = (imageEditor) => this.imageEditor = imageEditor
   render() {
     const {
-      _id,
       backgroundColor,
-      dispatch,
+      dirty,
       error,
       fields,
       fontFamily,
       form,
       handleSubmit,
       image,
+      reset,
       submitSucceeded,
-      submitting
+      submitting,
+      valid
     } = this.props
     return (
       <Card
@@ -96,10 +97,14 @@ class BrandForm extends Component {
           {error && <div className="error">{error}</div>}
           <div className="button-container">
             <SuccessableButton
+              dirty={dirty}
+              error={error}
+              label={`update ${form}`}
+              reset={reset}
               submitSucceeded={submitSucceeded}
               submitting={submitting}
-              label={`update ${form}`}
               successLabel={`${form} updated!`}
+              valid={valid}
             />
           </div>
         </form>
@@ -111,12 +116,17 @@ class BrandForm extends Component {
 BrandForm.propTypes = {
   _id: PropTypes.string.isRequired,
   backgroundColor: PropTypes.string.isRequired,
+  destroy: PropTypes.func.isRequired,
   dispatch: PropTypes.func.isRequired,
+  error: PropTypes.string,
   fields: PropTypes.array.isRequired,
   fontFamily: PropTypes.string.isRequired,
   form: PropTypes.string.isRequired,
   image: PropTypes.object,
   initialValues: PropTypes.object,
+  submitSucceeded: PropTypes.bool.isRequired,
+  submitting: PropTypes.bool.isRequired,
+  valid: PropTypes.bool.isRequired
 }
 
-export default reduxForm({})(BrandForm)
+export default reduxForm({ enableReinitialize: true })(BrandForm)

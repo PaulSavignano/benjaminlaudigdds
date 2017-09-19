@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import SwipeableViews from 'react-swipeable-views'
 import { autoPlay } from 'react-swipeable-views-utils'
 import RaisedButton from 'material-ui/RaisedButton'
 
+import './section.css'
 import swipeableContainer from '../../containers/sections/swipeableContainer'
-import AdminSectionAdd from './AdminSectionAdd'
+import AdminSectionButtons from './AdminSectionButtons'
 import renderAdminComponents from './renderAdminComponents'
-import { fetchUpdate, fetchDelete } from '../../actions/sections'
 import { startEdit } from '../../actions/editItem'
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
@@ -23,48 +22,40 @@ class AdminSwipeableSection extends Component {
     const {
       autoplay,
       dispatch,
-      item: {
-        _id,
-        items
-      },
+      item,
       pageId,
       pageSlug,
       propsForParent,
       propsForChild,
     } = this.props
     return (
-      <section
-        onTouchTap={this.handleStartEdit}
-        {...propsForParent}
-      >
-        <AutoPlaySwipeableViews
-          autoplay={true}
-          slideStyle={propsForChild.style}
-          interval={4000}
-          animateTransitions={true}
-          springConfig={{
-            duration: '4s',
-            easeFunction: 'ease-in-out',
-            delay: '-1s'
-          }}
-          className="heroCarousel"
+      <div className="admin-section">
+        <section
+          onTouchTap={this.handleStartEdit}
+          {...propsForParent}
         >
-          {renderAdminComponents({ components: items, pageSlug })}
-        </AutoPlaySwipeableViews>
-        <div style={{ display: 'flex', position: 'absolute', bottom: 8, right: 8 }}>
-          <AdminSectionAdd
-            dispatch={dispatch}
-            pageId={pageId}
-            pageSlug={pageSlug}
-            sectionId={_id}
-          />
-          <RaisedButton
-            label="Edit Section"
-            onTouchTap={this.handleStartEdit}
-            style={{ margin: 8 }}
-          />
-        </div>
-      </section>
+          <AutoPlaySwipeableViews
+            autoplay={autoplay}
+            slideStyle={propsForChild.style}
+            interval={4000}
+            animateTransitions={true}
+            springConfig={{
+              duration: '4s',
+              easeFunction: 'ease-in-out',
+              delay: '-1s'
+            }}
+            className="heroCarousel"
+          >
+            {renderAdminComponents({ components: item.items, pageSlug })}
+          </AutoPlaySwipeableViews>
+        </section>
+        <AdminSectionButtons
+          dispatch={dispatch}
+          item={item}
+          pageId={pageId}
+          pageSlug={pageSlug}
+        />
+      </div>
     )
   }
 }

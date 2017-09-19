@@ -18,7 +18,7 @@ export const sendEmail1 = (mail) => {
   const { to, toSubject, toBody, fromSubject, fromBody } = mail
   return Brand.findOne({})
     .then(brand => {
-      if (!brand) return Promise.reject({ error: 'No brand found'})
+      if (!brand) return Promise.reject('No brand found')
       const {
         appBar: {
           values: { fontFamily }
@@ -53,16 +53,18 @@ export const sendEmail1 = (mail) => {
         subject: toSubject,
         html: `${toBody}<br/>${signature}`
       }
-      const adminMail = {
-        from: process.env.GMAIL_USER,
-        to: process.env.GMAIL_USER,
-        subject: fromSubject,
-        html: `${fromBody}<br/>${signature}`
+      if (fromSubject) {
+        const adminMail = {
+          from: process.env.GMAIL_USER,
+          to: process.env.GMAIL_USER,
+          subject: fromSubject,
+          html: `${fromBody}<br/>${signature}`
+        }
+        transporter.sendMail(adminMail)
       }
-      transporter.sendMail(adminMail)
       return transporter.sendMail(userMail)
         .then(info => info)
-        .catch(err => console.error(err))
+        .catch(error => console.error(error))
     })
-    .catch(err => console.error(err))
+    .catch(error => console.error(error))
 }

@@ -1,20 +1,17 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { push } from 'react-router-redux'
+import { Link } from 'react-router-dom'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 import Badge from 'material-ui/Badge'
 
-import { toggleDrawer } from '../../actions/drawer'
-
-class HeaderCartIcon extends Component {
-  handleNavToCart = () => {
-    this.props.onNavToCart()
-  }
+class CartIcon extends Component {
   render() {
     const {
+      badgeStyle,
       cartQty,
-      color
+      color,
+      style
     } = this.props
     return (
       <IconButton
@@ -22,7 +19,7 @@ class HeaderCartIcon extends Component {
           <Badge
             badgeContent={cartQty}
             primary={true}
-            badgeStyle={{top: -10, left: 9 }}
+            badgeStyle={badgeStyle}
           >
             <FontIcon
               className="fa fa-shopping-cart"
@@ -30,17 +27,18 @@ class HeaderCartIcon extends Component {
             />
           </Badge>
         }
-        onTouchTap={this.handleNavToCart}
+        containerElement={<Link to="/user/cart"/>}
         iconStyle={{ padding: 0 }}
+        style={style}
       />
     )
   }
 }
 
-HeaderCartIcon.propTypes = {
+CartIcon.propTypes = {
   cartQty: PropTypes.number,
   color: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired
 }
 
-export default HeaderCartIcon
+export default CartIcon

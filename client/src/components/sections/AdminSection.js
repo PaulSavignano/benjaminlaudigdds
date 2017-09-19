@@ -1,54 +1,40 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import RaisedButton from 'material-ui/RaisedButton'
 
+import './section.css'
 import sectionContainer from '../../containers/sections/sectionContainer'
+import AdminSectionButtons from './AdminSectionButtons'
 import AdminSectionAdd from './AdminSectionAdd'
 import renderAdminComponents from './renderAdminComponents'
-import { fetchUpdate, fetchDelete } from '../../actions/sections'
-import { fetchAdd } from '../../actions/cards'
-import { startEdit } from '../../actions/editItem'
 
 class AdminSection extends Component {
-  handleStartEdit = (e) => {
-    e.stopPropagation()
-    const { dispatch, item } = this.props
-    return dispatch(startEdit({ item, kind: 'SECTION' }))
-  }
   render() {
     const {
       dispatch,
-      item: {
-        _id,
-        items
-      },
+      item,
       pageId,
       pageSlug,
       propsForParent,
       propsForChild,
     } = this.props
+    const { items } = item
     return (
-      <section
-        onTouchTap={this.handleStartEdit}
-        {...propsForParent}
-      >
-        <div {...propsForChild}>
-          {renderAdminComponents({ components: items, pageSlug })}
-        </div>
-        <div style={{ display: 'flex', position: 'absolute', bottom: 8, right: 8 }}>
-          <AdminSectionAdd
-            dispatch={dispatch}
-            pageId={pageId}
-            pageSlug={pageSlug}
-            sectionId={_id}
-          />
-          <RaisedButton
-            label="Edit Section"
-            onTouchTap={this.handleStartEdit}
-            style={{ margin: 8 }}
-          />
-        </div>
-      </section>
+      <div className="admin-section">
+        <section
+          onTouchTap={this.handleStartEdit}
+          {...propsForParent}
+        >
+          <div {...propsForChild}>
+            {renderAdminComponents({ components: items, pageSlug })}
+          </div>
+        </section>
+        <AdminSectionButtons
+          dispatch={dispatch}
+          item={item}
+          pageId={pageId}
+          pageSlug={pageSlug}
+        />
+      </div>
     )
   }
 }

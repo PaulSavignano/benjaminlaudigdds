@@ -23,6 +23,7 @@ const sectionContainer = (ComposedComponent) => {
           maxWidth,
           minHeight,
           margin,
+          padding,
           pageLink,
         }
       } = item
@@ -32,6 +33,9 @@ const sectionContainer = (ComposedComponent) => {
           backgroundImage: image.src ? `url(${image.src})` : null,
           backgroundColor,
           marginTop: containerMarginTop,
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          maxWidth,
           minHeight,
           position: 'relative'
         },
@@ -43,8 +47,8 @@ const sectionContainer = (ComposedComponent) => {
           display: 'flex',
           flexFlow,
           justifyContent,
-          maxWidth,
-          margin
+          margin,
+          padding
         }
       }
       this.setState({ propsForParent, propsForChild })
@@ -63,7 +67,6 @@ const sectionContainer = (ComposedComponent) => {
       const {
         dispatch,
         item,
-        autoplay,
         pageId,
         pageSlug,
       } = this.props
@@ -80,8 +83,7 @@ const sectionContainer = (ComposedComponent) => {
       )
     }
   }
-  const mapStateToProps = ({
-  }, {
+  const mapStateToProps = (state, {
     item, pageId, pageSlug
   }) => ({
     item, pageId, pageSlug

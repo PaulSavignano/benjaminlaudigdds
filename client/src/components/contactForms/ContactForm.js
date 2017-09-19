@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import Dialog from 'material-ui/Dialog'
-import FlatButton from 'material-ui/FlatButton'
 import { Card, CardTitle, CardText } from 'material-ui/Card'
 import { Field, reduxForm } from 'redux-form'
 
@@ -44,9 +41,17 @@ class ContactForm extends Component {
     return dispatch(fetchContact(values))
   }
   render() {
-    console.log('rendered contact form')
     const { open, elevation } = this.state
-    const { dispatch, error, handleSubmit, submitSucceeded, submitting } = this.props
+    const {
+      dirty,
+      error,
+      handleSubmit,
+      reset,
+      submitFailed,
+      submitSucceeded,
+      submitting,
+      valid,
+    } = this.props
     return (
       <Card
         zDepth={elevation}
@@ -61,29 +66,16 @@ class ContactForm extends Component {
             <Field name="email" component={renderTextField} label="Email" fullWidth={true} />
             <Field name="message" component={renderTextField} label="Message" fullWidth={true} multiLine={true} rows={2} />
           </CardText>
-          {open &&
-            <Dialog
-              actions={
-                <FlatButton
-                  label="Close"
-                  primary={true}
-                  onTouchTap={this.handleClose}
-                />
-              }
-              modal={false}
-              open={this.state.open}
-              onRequestClose={this.handleClose}
-            >
-              Email was successfully sent!
-            </Dialog>
-          }
-          {error && <div className="error">{error}</div>}
           <div className="button-container">
             <SuccessableButton
+              dirty={dirty}
+              error={error}
+              label="Contact"
+              reset={reset}
               submitSucceeded={submitSucceeded}
               submitting={submitting}
-              label="submit"
-              successLabel="submitted!"
+              successLabel="Contact Request Received!"
+              valid={valid}
             />
           </div>
         </form>
@@ -92,17 +84,18 @@ class ContactForm extends Component {
   }
 }
 
+ContactForm.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  error: PropTypes.string,
+  handleSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.object.isRequired,
+  reset: PropTypes.func.isRequired,
+  submitSucceeded: PropTypes.bool.isRequired,
+  submitting: PropTypes.bool.isRequired,
+}
 
-ContactForm = reduxForm({
+export default contactFormContainer(reduxForm({
   form: 'contact',
+  enableReinitialize: true,
   validate
-})(ContactForm)
-
-const mapStateToProps = ({ user }) => ({
-  initialValues: user.values,
-  user
-})
-
-ContactForm = connect(mapStateToProps)(ContactForm)
-
-export default contactFormContainer(ContactForm)
+})(ContactForm))

@@ -9,6 +9,7 @@ import FlatButton from 'material-ui/FlatButton'
 import {Card, CardActions, CardTitle, CardText} from 'material-ui/Card'
 import MenuItem from 'material-ui/MenuItem'
 
+import SuccessableButton from '../buttons/SuccessableButton'
 import renderTextField from '../../components/fields/renderTextField'
 import renderSelectField from '../../components/fields/renderSelectField'
 import { fetchRequestEstimate } from '../../actions/user'
@@ -46,7 +47,16 @@ class RequestEstimate extends Component {
     if (nextProps.submitSucceeded) this.setState({ open: true })
   }
   render() {
-    const { dispatch, error, handleSubmit, submitting } = this.props
+    const {
+      dirty,
+      dispatch,
+      error,
+      handleSubmit,
+      reset,
+      submitSucceeded,
+      submitting,
+      valid,
+    } = this.props
     return (
       <div className="page">
         <section className="section-margin">
@@ -101,15 +111,18 @@ class RequestEstimate extends Component {
                 Email was successfully sent!
               </Dialog>
               }
-              <CardActions>
-                <RaisedButton
-                  label="Request Estimate"
-                  fullWidth={true}
-                  disabled={submitting}
-                  type="submit"
-                  primary={true}
+              <div className="button-container">
+                <SuccessableButton
+                  dirty={dirty}
+                  error={error}
+                  label="Request Estimage"
+                  reset={reset}
+                  submitSucceeded={submitSucceeded}
+                  submitting={submitting}
+                  successLabel="Estimate Requested!"
+                  valid={valid}
                 />
-              </CardActions>
+              </div>
             </form>
           </Card>
         </section>
@@ -119,8 +132,15 @@ class RequestEstimate extends Component {
   }
 }
 
+RequestEstimate.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  error: PropTypes.string.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  submitting: PropTypes.bool.isRequired,
+}
 
 RequestEstimate = reduxForm({
+  enableReinitialize: true,
   form: 'contact',
   validate
 })(RequestEstimate)

@@ -1,7 +1,3 @@
-import renderSelectField from '../../components/fields/renderSelectField'
-import renderTextField from '../fields/renderTextField'
-import renderWysiwgyField from '../fields/renderWysiwgyField'
-
 import { fetchUpdate as articleUpdate, fetchDelete as articleDelete } from '../../actions/articles'
 import { fetchUpdate as cardUpdate, fetchDelete as cardDelete } from '../../actions/cards'
 import { fetchUpdate as contactFormUpdate, fetchDelete as contactFormDelete } from '../../actions/contactForms'
@@ -23,10 +19,11 @@ const adminItemForms = [{
     { name: 'h2Text', type: 'text' },
     { name: 'h3Text', type: 'text' },
     { name: 'iframe', type: 'text' },
-    { name: 'mediaAlign', type: 'select', options: [ 'right', 'left' ] },
+    { name: 'mediaAlign', type: 'select', options: [ 'left', 'right' ] },
     { name: 'mediaBorder', type: 'text' },
     { name: 'mediaFlex', type: 'text' },
-    { name: 'pFlex', type: 'text' },
+    { name: 'mediaWrap', type: 'select', options: [ 'above', 'below' ] },
+    { name: 'textFlex', type: 'text' },
     { name: 'pText', type: 'wysiwgy' },
   ]
 }, {
@@ -101,6 +98,7 @@ const adminItemForms = [{
     { name: 'margin', type: 'text' },
     { name: 'maxWidth', type: 'text' },
     { name: 'minHeight', type: 'text' },
+    { name: 'padding', type: 'text' },
     { name: 'pageLink', type: 'text' }
   ]
 }]

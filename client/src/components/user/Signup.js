@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Link, withRouter } from 'react-router-dom'
 import RaisedButton from 'material-ui/RaisedButton'
 import { Card, CardActions, CardTitle, CardText } from 'material-ui/Card'
 import Dialog from 'material-ui/Dialog'
@@ -7,6 +8,7 @@ import FlatButton from 'material-ui/FlatButton'
 import { Field, reduxForm } from 'redux-form'
 
 import userContainer from '../../containers/user/userContainer'
+import SuccessableButton from '../buttons/SuccessableButton'
 import renderTextField from '../fields/renderTextField'
 import { fetchAdd } from '../../actions/user'
 
@@ -29,24 +31,37 @@ const validate = values => {
 
 class Signup extends Component {
   state = { open: false }
-  handleClose = () => this.setState({open: false})
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.submitSucceeded) this.setState({ open: true })
+  handleClose = () => {
+    this.setState({ open: false })
+    this.props.history.goBack()
+  }
+  handleFormSubmit = values => this.props.dispatch(fetchAdd(values))
+  componentWillReceiveProps({ reset, submitSucceeded }) {
+    if (submitSucceeded) {
+      this.setState({ open: true })
+      reset()
+    }
   }
   render() {
     const {
+      dirty,
       dispatch,
       error,
       handleSubmit,
+      primary1Color,
+      pristine,
+      reset,
+      submitSucceeded,
       submitting,
-      user
+      user,
+      valid
     } = this.props
     return (
       <div className="page">
-        <section className="section-margin">
-          <Card>
+        <section className="section">
+          <Card className="form">
             <CardTitle title="Signup" subtitle="Enter your information" />
-            <form onSubmit={handleSubmit(values => dispatch(fetchAdd(values)).then(() => this.props.reset()))} >
+            <form onSubmit={handleSubmit(this.handleFormSubmit)} >
               <CardText>
                 <Field name="firstName" component={renderTextField} label="First Name" fullWidth={true} />
                 <Field name="lastName" component={renderTextField} label="Last Name" fullWidth={true} />
@@ -54,33 +69,39 @@ class Signup extends Component {
                 <Field name="password" component={renderTextField} label="Password" fullWidth={true} type="password" />
                 <Field name="passwordConfirm" component={renderTextField} label="Password Confirm" fullWidth={true} type="password"/>
               </CardText>
-              {error && <div className="error">{error}</div>}
-              {!this.state.open ? null :
-              <Dialog
-                actions={
-                  <FlatButton
-                    label="Close"
-                    primary={true}
-                    onTouchTap={this.handleClose}
-                  />
-                }
-                modal={false}
-                open={this.state.open}
-                onRequestClose={this.handleClose}
-              >
-                Welcome {user.values.firstName && user.values.firstName}!
-              </Dialog>
-              }
-              <CardActions>
-                <RaisedButton
+              <div className="button-container">
+                <SuccessableButton
+                  dirty={dirty}
+                  error={error}
                   label="Sign Up"
-                  fullWidth={true}
-                  disabled={submitting}
-                  type="submit"
-                  primary={true}
+                  reset={null}
+                  submitSucceeded={submitSucceeded}
+                  submitting={submitting}
+                  successLabel={`Welcome ${user.values.firstName}!`}
+                  valid={valid}
                 />
-              </CardActions>
+              </div>
             </form>
+            {!this.state.open ? null :
+            <Dialog
+              actions={
+                <FlatButton
+                  label="Close"
+                  primary={true}
+                  onTouchTap={this.handleClose}
+                />
+              }
+              modal={false}
+              open={this.state.open}
+              onRequestClose={this.handleClose}
+            >
+              Welcome {user.values.firstName && user.values.firstName}!
+            </Dialog>
+            }
+            <CardActions className="card-actions">
+              <p>Already have an account? <Link to="/user/signin" style={{ color: primary1Color }}>Sign In!</Link></p>
+              <p>Forgot your password? <Link to="/user/recovery" style={{ color: primary1Color }}>Recover your account!</Link></p>
+            </CardActions>
           </Card>
         </section>
       </div>
@@ -89,9 +110,12 @@ class Signup extends Component {
 }
 
 Signup.propTypes = {
+  destroy: PropTypes.func.isRequired,
   dispatch: PropTypes.func.isRequired,
   error: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
+  submitSucceeded: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
   user: PropTypes.object.isRequired
 }
@@ -100,4 +124,4 @@ export default userContainer(
   reduxForm({
   form: 'signup',
   validate
-})(Signup))
+})(withRouter(Signup)))

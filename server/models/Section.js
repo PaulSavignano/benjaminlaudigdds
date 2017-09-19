@@ -29,6 +29,7 @@ const SectionSchema = new Schema({
     margin: { type: String, trim: true, default: '0 auto' },
     maxWidth: { type: String, trim: true, default: '1044px' },
     minHeight: { type: String, trim: true, default: '120px' },
+    padding: { type: String, trim: true },
     pageLink: { type: String, trim: true }
   }
 }, {
@@ -37,7 +38,6 @@ const SectionSchema = new Schema({
 
 
 SectionSchema.post('findOneAndRemove', function(doc, next) {
-  console.log('inside section hook')
   if (doc.image && doc.image.src) {
     deleteFile({ Key: doc.image.src }).catch(err => console.error(err))
   }

@@ -1,18 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { push } from 'react-router-redux'
 import renderHTML from 'react-render-html'
-import Paper from 'material-ui/Paper'
-import RaisedButton from 'material-ui/RaisedButton'
-import { Card, CardMedia, CardText, CardTitle } from 'material-ui/Card'
+import { Card } from 'material-ui/Card'
 
 import heroContainer from '../../containers/heros/heroContainer'
 
 import Buttons from '../buttons/Buttons'
-import Heading from '../typography/Heading'
+import Text from '../typography/Text'
 import Media from '../media/Media'
 import P from '../typography/P'
-import { fetchUpdate, fetchDelete } from '../../actions/heros'
 import { startEdit } from '../../actions/editItem'
 
 class AdminHero extends Component {
@@ -23,6 +19,7 @@ class AdminHero extends Component {
   }
   render() {
     const {
+      dispatch,
       heroStyle: {
         values: {
           button1Color,
@@ -40,20 +37,14 @@ class AdminHero extends Component {
           h3TextShadow,
           mediaBorder,
           mediaElevation,
-          minHeight,
         }
       },
-      dispatch,
       hasButtons,
-      hasHeading,
+      hasText,
       hasMedia,
-      hasParagraph,
       item: {
-        _id,
-        editing,
         image,
         values: {
-          backgroundColor,
           button1Text,
           button1Link,
           button2Text,
@@ -82,10 +73,12 @@ class AdminHero extends Component {
             <Media
               image={image}
               iframe={iframe}
+              border={mediaBorder}
+              elevation={mediaElevation}
             />
           }
-          {hasHeading &&
-            <Heading
+          {hasText &&
+            <Text
               h1Align={h1Align}
               h2Align={h2Align}
               h3Align={h3Align}
@@ -100,7 +93,6 @@ class AdminHero extends Component {
               h3TextShadow={h3TextShadow}
             />
           }
-          {hasParagraph && <P>{renderHTML(pText)}</P>}
           {hasButtons &&
             <Buttons
               button1BackgroundColor={button1BackgroundColor}
@@ -123,9 +115,8 @@ class AdminHero extends Component {
 AdminHero.propTypes = {
   dispatch: PropTypes.func.isRequired,
   hasButtons: PropTypes.bool.isRequired,
-  hasHeading: PropTypes.bool.isRequired,
+  hasText: PropTypes.bool.isRequired,
   hasMedia: PropTypes.bool.isRequired,
-  hasParagraph: PropTypes.bool.isRequired,
   heroStyle: PropTypes.object.isRequired,
   item: PropTypes.object.isRequired,
 }
