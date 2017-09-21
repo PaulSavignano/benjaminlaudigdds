@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import GoogleAnalytics from 'react-ga';
 
-GoogleAnalytics.initialize('UA-106746690-1');
+GoogleAnalytics.initialize('UA-100349397-1');
 
 const withTracker = (WrappedComponent, options = {}) => {
   const trackPage = page => {

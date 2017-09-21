@@ -23,6 +23,7 @@ class SuccessableButton extends Component {
     backgroundColor,
     dirty,
     error,
+    imageEdit,
     label,
     reset,
     submitSucceeded,
@@ -49,36 +50,28 @@ class SuccessableButton extends Component {
         timeoutId
       })
     }
+
     if (dirty && valid) {
       if (this.state.timeoutId) {
         clearTimeout(this.state.timeoutId)
-        return this.setState({
-          background: backgroundColor,
-          disabled: false,
-          label,
-          timeoutId: null
-        })
       }
       return this.setState({
         background: backgroundColor,
         disabled: false,
         label,
+        timeoutId: null
       })
     }
+
     if (dirty && !valid) {
       if (this.state.timeoutId) {
         clearTimeout(this.state.timeoutId)
-        return this.setState({
-          background: backgroundColor,
-          disabled: true,
-          label,
-          timeoutId: null
-        })
       }
       return this.setState({
         background: backgroundColor,
         disabled: true,
         label,
+        timeoutId: null
       })
     }
 
@@ -98,6 +91,26 @@ class SuccessableButton extends Component {
         disabled: false,
         label: successLabel,
         timeoutId
+      })
+    }
+
+    if (!dirty && valid) {
+      if (this.state.timeoutId) {
+        clearTimeout(this.state.timeoutId)
+      }
+      return this.setState({
+        background: backgroundColor,
+        disabled: true,
+        label,
+        timeoutId: null
+      })
+    }
+
+    if (imageEdit) {
+      return this.setState({
+        background: backgroundColor,
+        disabled: false,
+        label,
       })
     }
   }
