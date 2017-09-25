@@ -98,6 +98,7 @@ class AdminItemForm extends Component {
   setImageFormRef = (imageEditor) => this.imageEditor = imageEditor
   setBackgroundImageFormRef = (backgroundImageEditor) => this.backgroundImageEditor = backgroundImageEditor
   render() {
+    const { imageEdit } = this.state
     const {
       error,
       handleSubmit,
@@ -106,6 +107,7 @@ class AdminItemForm extends Component {
         item: { _id, backgroundImage, image },
         kind,
       },
+      pristine,
       submitting
     } = this.props
     return (

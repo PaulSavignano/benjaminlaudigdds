@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import renderHTML from 'react-render-html'
 import { Card } from 'material-ui/Card'
 
 import './card.css'
@@ -23,10 +22,11 @@ class AdminCard extends Component {
       cursor,
       elevation,
       linkEvents,
-      linkNavigation
+      item: {
+        values: { flex }
+      },
     } = this.props
     const {
-      flex,
       margin,
       width
     } = cardStyle.values

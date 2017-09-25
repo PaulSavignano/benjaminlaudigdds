@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Route, Redirect } from 'react-router-dom'
-import { withRouter } from 'react-router-dom'
 
-import history from '../routers/history'
-import userContainer from './userContainer'
+import userContainer from '../../containers/user/userContainer'
 
 class PrivateRoute extends Component {
   hasRoles = (roles, requiredRoles) => {
@@ -21,7 +19,7 @@ class PrivateRoute extends Component {
     return (
       <Route {...rest} component={(props) => (
         this.hasRoles(user.roles, requiredRoles) ? (
-          <Component {...this.props} />
+          <Component {...props} />
         ) : (
           <Redirect to="/user/signin" />
         )
@@ -29,6 +27,7 @@ class PrivateRoute extends Component {
     )
   }
 }
+
 PrivateRoute.propTypes = {
   user: PropTypes.object.isRequired,
 }

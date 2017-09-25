@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-
 const sectionContainer = (ComposedComponent) => {
   class SectionContainer extends Component {
     state = {
@@ -35,7 +34,6 @@ const sectionContainer = (ComposedComponent) => {
           marginTop: containerMarginTop,
           marginLeft: 'auto',
           marginRight: 'auto',
-          maxWidth,
           minHeight,
           position: 'relative'
         },
@@ -48,6 +46,7 @@ const sectionContainer = (ComposedComponent) => {
           flexFlow,
           justifyContent,
           margin,
+          maxWidth,
           padding
         }
       }

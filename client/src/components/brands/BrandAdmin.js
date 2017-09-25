@@ -12,6 +12,8 @@ const formFields = [{
     { name: 'fontFamily', type: 'text' },
     { name: 'fontSize', type: 'text' },
     { name: 'fontWeight', type: 'text' },
+    { name: 'height', type: 'text' },
+    { name: 'imagePosition', type: 'select', options: [ 'absolute', 'relative' ]},
     { name: 'letterSpacing', type: 'text' },
     { name: 'name', type: 'text' },
     { name: 'navColor', type: 'text' },
@@ -47,13 +49,14 @@ const formFields = [{
   name: 'business',
   fields: [
     { name: 'name', type: 'text' },
+    { name: 'license', type: 'text' },
     { name: 'description', type: 'text' },
     { name: 'phone', type: 'phone' },
     { name: 'email', type: 'text' },
     { name: 'street', type: 'text' },
     { name: 'city', type: 'text' },
-    { name: 'state', type: 'text' },
-    { name: 'zip', type: 'text' },
+    { name: 'state', type: 'state' },
+    { name: 'zip', type: 'zip' },
     { name: 'facebook', type: 'text' },
     { name: 'github', type: 'text' },
     { name: 'google', type: 'text' },
@@ -102,6 +105,8 @@ const formFields = [{
     { name: 'button2BackgroundColor', type: 'text' },
     { name: 'button1Color', type: 'text' },
     { name: 'button2Color', type: 'text' },
+    { name: 'button1BorderColor', type: 'text' },
+    { name: 'button2BorderColor', type: 'text' },
     { name: 'h1Align', type: 'text' },
     { name: 'h1Color', type: 'text' },
     { name: 'h1TextShadow', type: 'text' },
@@ -146,13 +151,9 @@ const formFields = [{
     { name: 'mediaElevation', type: 'text' },
   ]
 }, {
-  name: 'theme',
-  fields: [
-    { name: 'fontFamily', type: 'text' }
-  ]
-}, {
   name: 'typography',
   fields: [
+    { name: 'fontFamily', type: 'text' },
     { name: 'h1FontFamily', type: 'text' },
     { name: 'h1FontSize', type: 'text' },
     { name: 'h1FontWeight', type: 'text' },
@@ -186,7 +187,6 @@ const BrandAdmin = ({
     heroStyle,
     palette,
     productStyle,
-    theme,
     typography,
   },
   dispatch
@@ -201,7 +201,6 @@ const BrandAdmin = ({
     heroStyle,
     palette,
     productStyle,
-    theme,
     typography,
   ]
   return (
@@ -217,7 +216,7 @@ const BrandAdmin = ({
               key={i}
               image={image}
               fields={formFields[i].fields}
-              fontFamily={theme.values.fontFamily}
+              fontFamily={typography.values.fontFamily}
               form={formFields[i].name}
               initialValues={values}
             />

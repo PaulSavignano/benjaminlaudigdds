@@ -1,11 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import renderHTML from 'react-render-html'
 
 import Buttons from '../buttons/Buttons'
 import Text from '../typography/Text'
 import Media from '../media/Media'
-import P from '../typography/P'
 
 const HeroContent = ({
   heroStyle: {
@@ -14,6 +12,8 @@ const HeroContent = ({
       button2Color,
       button1BackgroundColor,
       button2BackgroundColor,
+      button1BorderColor,
+      button2BorderColor,
       h1Align,
       h1Color,
       h1TextShadow,
@@ -85,6 +85,8 @@ const HeroContent = ({
           button2BackgroundColor={button2BackgroundColor}
           button1Color={button1Color}
           button2Color={button2Color}
+          button1BorderColor={button1BorderColor}
+          button2BorderColor={button2BorderColor}
           button1Link={button1Link}
           button2Link={button2Link}
           button1Text={button1Text}

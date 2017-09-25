@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import RaisedButton from 'material-ui/RaisedButton'
 import CircularProgress from 'material-ui/CircularProgress'
 
-import successableButtonContainer from '../../containers/buttons/successableButtonContainer'
+import buttonContainer from '../../containers/buttons/buttonContainer'
 
 class SuccessableButton extends Component {
   state = {
@@ -14,7 +14,6 @@ class SuccessableButton extends Component {
   componentWillMount() {
     const {
       backgroundColor,
-      valid,
       label
     } = this.props
     this.setState({ background: backgroundColor, disabled: true, label })
@@ -31,12 +30,19 @@ class SuccessableButton extends Component {
     successLabel,
     valid
   }) {
+    if (imageEdit) {
+      return this.setState({
+        background: backgroundColor,
+        disabled: false,
+        label,
+      })
+    }
+
     if (error) {
       const timeoutId = setTimeout(() => {
         clearTimeout(this.state.timeoutId)
         this.setState({
           background: backgroundColor,
-          label,
           disabled: true,
           label,
           submitting: false
@@ -106,13 +112,6 @@ class SuccessableButton extends Component {
       })
     }
 
-    if (imageEdit) {
-      return this.setState({
-        background: backgroundColor,
-        disabled: false,
-        label,
-      })
-    }
   }
   componentWillUnmount() {
     clearTimeout(this.state.timeoutId)
@@ -155,4 +154,4 @@ SuccessableButton.propTypes = {
   valid: PropTypes.bool.isRequired
 }
 
-export default successableButtonContainer(SuccessableButton)
+export default buttonContainer(SuccessableButton)

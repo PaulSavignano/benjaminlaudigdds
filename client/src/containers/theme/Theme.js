@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -19,7 +18,7 @@ const mapStateToProps = ({
     bodyStyle: { values: { backgroundColor}},
     isFetching,
     palette: { values },
-    theme: { values: { fontFamily }}
+    typography: { values: { fontFamily }}
   }
 }) => ({
   theme: { fontFamily, palette: values },
