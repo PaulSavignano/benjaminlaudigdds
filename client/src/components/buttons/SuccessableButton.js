@@ -10,13 +10,15 @@ class SuccessableButton extends Component {
     background: null,
     disabled: null,
     label: '',
+    timeoutId: null
   }
   componentWillMount() {
     const {
+      disabled,
       backgroundColor,
       label
     } = this.props
-    this.setState({ background: backgroundColor, disabled: true, label })
+    this.setState({ background: backgroundColor, disabled, label })
   }
   componentWillReceiveProps({
     backgroundColor,
@@ -29,26 +31,31 @@ class SuccessableButton extends Component {
     submitting,
     successLabel,
   }) {
+
     if (imageEdit !== this.props.imageEdit) {
+      this.state.timeoutId && clearTimeout(this.state.timeoutId)
       return this.setState({
         background: backgroundColor,
         disabled: false,
         label,
+        timeoutId: null
       })
     }
 
 
-    if (error !== this.props.error) {
+    if (error) {
+      this.state.timeoutId && clearTimeout(this.state.timeoutId)
       const timeoutId = setTimeout(() => {
         clearTimeout(this.state.timeoutId)
         this.setState({
           background: backgroundColor,
           disabled: true,
           label,
-          submitting: false
+          submitting: false,
+          timeoutId: null
         })
         reset && reset()
-      }, 3000)
+      }, 5000)
       return this.setState({
         background: 'rgb(244, 67, 54)',
         disabled: false,
@@ -58,6 +65,7 @@ class SuccessableButton extends Component {
     }
 
     if (disabled !== this.props.disabled) {
+      this.state.timeoutId && clearTimeout(this.state.timeoutId)
       this.setState({
         background: backgroundColor,
         disabled,
@@ -67,17 +75,18 @@ class SuccessableButton extends Component {
     }
 
     if (submitSucceeded !== this.props.submitSucceeded) {
-      console.log('submitSucceeded', submitSucceeded)
+      this.state.timeoutId && clearTimeout(this.state.timeoutId)
       const timeoutId = setTimeout(() => {
         clearTimeout(this.state.timeoutId)
         this.setState({
           background: backgroundColor,
           disabled: true,
           label,
-          submitting: false
+          submitting: false,
+          timeoutId: null
         })
         reset && reset()
-      }, 3000)
+      }, 5000)
       return this.setState({
         background: 'rgb(76, 175, 80)',
         disabled: false,

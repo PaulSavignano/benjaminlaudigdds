@@ -11,6 +11,7 @@ const adminItemForms = [{
   update: articleUpdate,
   delete: articleDelete,
   fields: [
+    { name: 'articleFlex', type: 'text' },
     { name: 'button1Text', type: 'text' },
     { name: 'button1Link', type: 'text' },
     { name: 'button2Text', type: 'text' },
@@ -20,9 +21,9 @@ const adminItemForms = [{
     { name: 'h2Text', type: 'text' },
     { name: 'h3Text', type: 'text' },
     { name: 'iframe', type: 'text' },
-    { name: 'mediaAlign', type: 'select', options: [ 'left', 'right' ] },
+    { name: 'mediaAlign', type: 'select', options: [ 'aboveText', 'belowText', 'leftOfText', 'leftOfParagraph', 'rightOfText', 'rightOfParagraph' ] },
     { name: 'mediaBorder', type: 'text' },
-    { name: 'mediaBoxShadow', type: 'text' },
+    { name: 'mediaBorderRadius', type: 'text' },
     { name: 'mediaElevation', type: 'number' },
     { name: 'mediaFlex', type: 'text' },
     { name: 'textFlex', type: 'text' },
@@ -51,14 +52,7 @@ const adminItemForms = [{
   delete: contactFormDelete,
   fields: [
     { name: 'button1Text', type: 'text' },
-    { name: 'button1Link', type: 'text' },
-    { name: 'button2Text', type: 'text' },
-    { name: 'button2Link', type: 'text' },
-    { name: 'h1Text', type: 'text', },
-    { name: 'h2Text', type: 'text', },
     { name: 'h3Text', type: 'text', },
-    { name: 'iframe', type: 'text', },
-    { name: 'link', type: 'text', },
     { name: 'pText', type: 'wysiwgy' },
   ]
 }, {
@@ -75,6 +69,9 @@ const adminItemForms = [{
     { name: 'h2Text', type: 'text', },
     { name: 'h3Text', type: 'text', },
     { name: 'iframe', type: 'text', },
+    { name: 'mediaFlex', type: 'text' },
+    { name: 'mediaBorderRadius', type: 'text' },
+    { name: 'mediaElevation', type: 'number' },
     { name: 'pText', type: 'wysiwgy' }
   ]
 }, {
@@ -100,10 +97,10 @@ const adminItemForms = [{
   delete: sectionDelete,
   fields: [
     { name: 'alignItems', type: 'text' },
-    { name: 'backgroundColor', type: 'text' },
+    { name: 'containerBackgroundColor', type: 'text' },
     { name: 'kind', type: 'select', options: [ 'Flex', 'SlideShow', 'Swipeable' ] },
     { name: 'flexFlow', type: 'select', options: ['row wrap', 'row wrap-reverse', 'row nowrap', 'column' ] },
-    { name: 'justifyContent', type: 'text' },
+    { name: 'justifyContent', type: 'select', options: ['flex-start', 'flex-end', 'center', 'space-around', 'space-between'] },
     { name: 'margin', type: 'text' },
     { name: 'maxWidth', type: 'text' },
     { name: 'minHeight', type: 'text' },

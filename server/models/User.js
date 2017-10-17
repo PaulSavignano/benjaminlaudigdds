@@ -2,9 +2,11 @@ import mongoose, { Schema } from 'mongoose'
 import validator from 'validator'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
+import { ObjectID } from 'mongodb'
 
-import Address from '../models/Address'
-import Order from '../models/Order'
+import Address from './Address'
+import Order from './Order'
+import Token from './Token'
 
 const UserSchema = new Schema({
   values: {
@@ -36,7 +38,7 @@ const UserSchema = new Schema({
     token: { type: String, required: true }
   }],
   passwordResetToken: { type: String, default: '' },
-  passwordResetExpires: { type: Date, default: Date.now },
+  passwordResetExpires: { type: Date },
   createdAt: { type: Date, default: Date.now }
 })
 
@@ -55,98 +57,68 @@ UserSchema.methods.toJSON = function() {
   return { _id, addresses, roles, values }
 }
 
-UserSchema.methods.generateAuthToken = function() {
-  const user = this
-  const access = 'auth'
-  const token = jwt.sign({ _id: user._id.toHexString(), access }, process.env.JWT_SECRET).toString()
-  user.tokens.push({ access, token })
-  return user.save()
-    .then(() => token)
-    .catch(err => Promise.reject(err))
-}
 
-UserSchema.methods.removeToken = function(token) {
-  const user = this
-  return user.update({
-    $pull: {
-      tokens: {
-        token
-      }
-    }
-  })
-}
 
-UserSchema.methods.removeTokens = function(tokens) {
-  const user = this
-  return user.update({
-    $pull: {
-      tokens: {
-        $in: tokens
-      }
-    }
-  })
-}
 
-UserSchema.methods.buildResponse = function() {
-  const user = this
-  this.populate({ path: 'addresses' })
-  const { _id, addresses, roles, values } = user
-  const isOwner = roles.some(role => role === 'owner')
-  const isAdmin = roles.some(role => role === 'admin')
-  if (isAdmin) {
-    return Promise.all([
-      User.find({}).sort({ 'values.lastName': 1, 'values.firstName': 1 }).then(users => users)
-    ])
-    .then(([users]) => {
-      return {
-        user: { _id, addresses, roles, values },
-        users: users
-      }
-    })
-    .catch(error => {
-      console.log(error)
-      res.status(400).send()
-    })
-  } else {
-    return Promise.resolve({ user: { _id, addresses, values, roles }})
-  }
-}
+
+
+
+
+
+
+
 
 UserSchema.statics.findByToken = function(token, roles) {
   const User = this
   let decoded
   try {
     decoded = jwt.verify(token, process.env.JWT_SECRET)
+    console.log(decoded)
   } catch (error) {
     return Promise.reject(error)
   }
-  return User.findOne({
-    _id: decoded._id,
-    roles: {
-      $in: roles
-    },
-    'tokens.token': token,
-    'tokens.access': 'auth'
+  return Token.findOne({ token, user: decoded._id })
+  .then(token => {
+    return User.findOne({ _id: token.user })
   })
 }
+
+
+
+
+
+UserSchema.methods.removeToken = function(token) {
+  const user = this
+  return Token.remove({ user: user._id })
+}
+
+
+
+
 
 UserSchema.statics.findByCredentials = function(email, password) {
   const User = this
   return User.findOne({ 'values.email': email.toLowerCase() })
+    .populate({ path: 'addresses' })
     .then(user => {
-      if (!user) return Promise.reject({ error: { email: 'User not found'}})
+      if (!user) return Promise.reject({ email: 'User not found' })
       return new Promise((resolve, reject) => {
         bcrypt.compare(password, user.password)
         .then(res => {
           if (res) {
             resolve(user)
           } else {
-            reject({ error: { password: 'Password does not match' }})
+            reject({ password: 'Password does not match' })
           }
         })
       })
     })
 }
+
+
+
+
+
 
 UserSchema.pre('save', function(next) {
   const user = this
@@ -162,8 +134,10 @@ UserSchema.pre('save', function(next) {
   }
 })
 
+
 UserSchema.post('findOneAndRemove', function(doc, next) {
-  Address.deleteMany({ _id: { $in: doc.addresses }}).catch(error => console.error(error))
+  Address.deleteMany({ user: doc._id }).catch(error => console.error(error))
+  Token.deleteMany({ user: doc._id }).catch(error => console.error(error))
   next()
 })
 

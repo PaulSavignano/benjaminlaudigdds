@@ -8,14 +8,7 @@ import { sendEmail1 } from '../middleware/nodemailer'
 const formatPrice = (cents) => `$${(cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
 
 export const add = (req, res, next) => {
-  const {
-    _id,
-    values: {
-      firstName,
-      lastName,
-      email
-    }
-  } = req.user
+  const { _id } = req.user
   const {
     token,
     fullAddress,
@@ -28,7 +21,7 @@ export const add = (req, res, next) => {
     cart
   } = req.body
   if (fullAddress === 'newAddress') {
-    const newDoc = new Address({
+    const newAddress = new Address({
       user: ObjectID(_id),
       values: {
         name,
@@ -39,67 +32,55 @@ export const add = (req, res, next) => {
         state
       }
     })
-    newDoc.save()
-    .then(doc => {
-      User.findOneAndUpdate(
+    newAddress.save()
+    .then(address => {
+      return User.findOneAndUpdate(
         { _id },
-        { $push: { addresses: doc._id }},
+        { $push: { addresses: address._id }},
         { new: true }
       )
-      .then(() => createCharge({
-        _id,
-        address: doc,
+      .then(user => createCharge({
+        address,
         cart,
-        email,
-        firstName,
-        lastName,
         token,
         res,
-        req
+        req,
+        user
       }))
-      .catch(error => {
-        console.error(error)
-        res.status(400).send({ error })
-      })
+      .catch(error => { console.error(error); res.status(400).send({ error })})
     })
-    .catch(error => {
-      console.error(error)
-      res.status(400).send({ error })
-    })
+    .catch(error => { console.error(error); res.status(400).send({ error })})
   } else {
-    Address.findOne({ _id: fullAddress })
-    .then(doc => createCharge({
-      _id,
-      address: doc,
-      cart,
-      email,
-      firstName,
-      lastName,
-      token,
-      res,
-      req
-    }))
-    .catch(error => {
-      console.error(error)
-      res.status(400).send({ error })
+    return Address.findOne({ _id: fullAddress })
+    .then(address => {
+      return User.findOne({ _id })
+      .then(user => createCharge({
+        address,
+        cart,
+        token,
+        res,
+        req,
+        user
+      }))
+      .catch(error => { console.error(error); res.status(400).send({ error })})
     })
+    .catch(error => { console.error(error); res.status(400).send({ error })})
   }
 }
 
 const createCharge = ({
-  _id,
   address,
   cart,
-  email,
-  firstName,
-  lastName,
   token,
   res,
-  req
+  req,
+  user
 }) => {
+  console.log('have a user?', user)
+  const { _id, values: { firstName, lastName, email }} = user
   const rootUrl = req.get('host')
   const stripe = require("stripe")(process.env.STRIPE_SK_TEST)
-  stripe.charges.create({
+  return stripe.charges.create({
     amount: Math.round(cart.total),
     currency: "usd",
     source: token,
@@ -118,7 +99,7 @@ const createCharge = ({
     })
     newOrder.save()
     .then(order => {
-      res.send(order)
+      res.send({ order, user })
       const { email, firstName, lastName, cart, address } = order
       const { name, phone, street, city, state, zip } = address
 
@@ -153,39 +134,26 @@ const createCharge = ({
         fromBody: `
           <p>${firstName} ${lastName} just placed order an order!</p>
           ${htmlOrder}
-          <p>Once shipped, you can mark the item as shipped in at ${rootUrl}/admin/orders to send confirmation to ${firstName}.</p>
+          <p>Once shipped, you can mark the item as shipped in at <a href="${rootUrl}/admin/orders">${rootUrl}/admin/orders</a> to send confirmation to ${firstName}.</p>
         `
       })
     })
-    .catch(error => {
-      console.error(error)
-      res.status(400).send({ error: error })
-    })
+    .catch(error => { console.error(error); res.status(400).send({ error })})
   })
-  .catch(error => {
-    console.error(error)
-    res.status(400).send({ error })
-  })
+  .catch(error => { console.error(error); res.status(400).send({ error })})
 }
 
 
 export const get = (req, res) => {
-  const isAdmin = req.user.roles.some(role => role === 'admin' || role === 'owner')
-  if (isAdmin) {
-    Order.find({})
-      .then(orders => res.send(orders))
-      .catch(error => {
-        console.error(error)
-        res.status(400).send({ error })
-      })
-  } else {
-    Order.find({ user: req.user._id })
-    .then(orders => res.send(orders))
-    .catch(error => {
-      console.error(error)
-      res.status(400).send({ error })
-    })
-  }
+  Order.find({ user: req.user._id })
+  .then(orders => res.send(orders))
+  .catch(error => { console.error(error); res.status(400).send({ error })})
+}
+
+export const getAdmin = (req, res) => {
+  Order.find({})
+  .then(orders => res.send(orders))
+  .catch(error => { console.error(error); res.status(400).send({ error })})
 }
 
 
@@ -229,10 +197,7 @@ export const update = (req, res) => {
             <div>${city}, ${state} ${zip}</div>
           `})
         })
-        .catch(error => {
-          console.error(error)
-          res.status(400).send({ error })
-        })
+        .catch(error => { console.error(error); res.status(400).send({ error })})
       break
     default:
       return

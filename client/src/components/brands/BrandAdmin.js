@@ -13,6 +13,8 @@ const formFields = [{
     { name: 'fontSize', type: 'text' },
     { name: 'fontWeight', type: 'text' },
     { name: 'height', type: 'text' },
+    { name: 'imageBorderRadius', type: 'text' },
+    { name: 'imageElevation', type: 'number' },
     { name: 'imagePosition', type: 'select', options: [ 'absolute', 'relative' ]},
     { name: 'letterSpacing', type: 'text' },
     { name: 'name', type: 'text' },
@@ -25,6 +27,8 @@ const formFields = [{
   fields: [
     { name: 'button1BackgroundColor', type: 'text' },
     { name: 'button2BackgroundColor', type: 'text' },
+    { name: 'button1Border', type: 'text' },
+    { name: 'button2Border', type: 'text' },
     { name: 'button1Color', type: 'text' },
     { name: 'button2Color', type: 'text' },
     { name: 'h1Align', type: 'select', options: ['left', 'center', 'right'] },
@@ -36,8 +40,8 @@ const formFields = [{
     { name: 'h3Align', type: 'select', options: ['left', 'center', 'right']  },
     { name: 'h3Color', type: 'text' },
     { name: 'h3TextShadow', type: 'text' },
+    { name: 'pColor', type: 'text' },
     { name: 'mediaBorder', type: 'text' },
-    { name: 'mediaBoxShadow', type: 'text' },
     { name: 'mediaElevation', type: 'number' },
   ]
 }, {
@@ -52,12 +56,17 @@ const formFields = [{
     { name: 'license', type: 'text' },
     { name: 'description', type: 'text' },
     { name: 'keywords', type: 'text' },
+    { name: 'googleSiteVerification', type: 'text' },
+    { name: 'googleAnalyticsUA', type: 'text' },
+    { name: 'stripePk', type: 'text' },
     { name: 'phone', type: 'phone' },
     { name: 'email', type: 'text' },
     { name: 'street', type: 'text' },
     { name: 'city', type: 'text' },
     { name: 'state', type: 'state' },
     { name: 'zip', type: 'zip' },
+    { name: 'imageBorderRadius', type: 'text' },
+    { name: 'imageElevation', type: 'number' },
     { name: 'facebook', type: 'text' },
     { name: 'github', type: 'text' },
     { name: 'google', type: 'text' },
@@ -72,6 +81,8 @@ const formFields = [{
   fields: [
     { name: 'button1BackgroundColor', type: 'text' },
     { name: 'button2BackgroundColor', type: 'text' },
+    { name: 'button1Border', type: 'text' },
+    { name: 'button2Border', type: 'text' },
     { name: 'button1Color', type: 'text' },
     { name: 'button2Color', type: 'text' },
     { name: 'elevation', type: 'number' },
@@ -85,6 +96,7 @@ const formFields = [{
     { name: 'h3Align', type: 'select', options: ['left', 'center', 'right']  },
     { name: 'h3Color', type: 'text' },
     { name: 'h3TextShadow', type: 'text' },
+    { name: 'pColor', type: 'text' },
     { name: 'margin', type: 'text' },
     { name: 'mediaBorder', type: 'text' },
   ]
@@ -95,7 +107,9 @@ const formFields = [{
     { name: 'color', type: 'text' },
     { name: 'borderTop', type: 'text' },
     { name: 'borderBottom', type: 'text' },
-    { name: 'margin', type: 'text' }
+    { name: 'imageBorderRadius', type: 'text' },
+    { name: 'imageElevation', type: 'number' },
+    { name: 'imageMargin', type: 'text' }
   ]
 }, {
   name: 'heroStyle',
@@ -103,6 +117,8 @@ const formFields = [{
     { name: 'alignItems', type: 'select', options: [ 'flex-start', 'center', 'flex-end' ] },
     { name: 'button1BackgroundColor', type: 'text' },
     { name: 'button2BackgroundColor', type: 'text' },
+    { name: 'button1Border', type: 'text' },
+    { name: 'button2Border', type: 'text' },
     { name: 'button1Color', type: 'text' },
     { name: 'button2Color', type: 'text' },
     { name: 'button1BorderColor', type: 'text' },
@@ -116,6 +132,7 @@ const formFields = [{
     { name: 'h3Align', type: 'text' },
     { name: 'h3Color', type: 'text' },
     { name: 'h3TextShadow', type: 'text' },
+    { name: 'pColor', type: 'text' },
     { name: 'mediaBorder', type: 'text' },
     { name: 'mediaElevation', type: 'number' },
     { name: 'minHeight', type: 'text' },
@@ -147,7 +164,6 @@ const formFields = [{
     { name: 'nameColor', type: 'text' },
     { name: 'nameTextShadow', type: 'text' },
     { name: 'margin', type: 'text' },
-    { name: 'mediaBoxShadow', type: 'text' },
     { name: 'mediaElevation', type: 'text' },
   ]
 }, {
@@ -158,12 +174,10 @@ const formFields = [{
     { name: 'h1FontSize', type: 'text' },
     { name: 'h1FontWeight', type: 'text' },
     { name: 'h1LetterSpacing', type: 'text' },
-    { name: 'h1LineHeight', type: 'text' },
     { name: 'h2FontFamily', type: 'text' },
     { name: 'h2FontSize', type: 'text' },
     { name: 'h2FontWeight', type: 'text' },
     { name: 'h2LetterSpacing', type: 'text' },
-    { name: 'h2LineHeight', type: 'text' },
     { name: 'h3FontFamily', type: 'text' },
     { name: 'h3FontSize', type: 'text' },
     { name: 'h3FontWeight', type: 'text' },

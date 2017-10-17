@@ -12,8 +12,8 @@ const HeroContent = ({
       button2Color,
       button1BackgroundColor,
       button2BackgroundColor,
-      button1BorderColor,
-      button2BorderColor,
+      button1Border,
+      button2Border,
       h1Align,
       h1Color,
       h1TextShadow,
@@ -24,7 +24,6 @@ const HeroContent = ({
       h3Color,
       h3TextShadow,
       pColor,
-      pTextShadow,
       mediaBorder,
       mediaElevation,
       minHeight,
@@ -48,6 +47,9 @@ const HeroContent = ({
       h2Text,
       h3Text,
       iframe,
+      mediaBorderRadius,
+      mediaElevation: itemMediaElevation,
+      mediaFlex,
       pText
     }
   },
@@ -55,10 +57,16 @@ const HeroContent = ({
   return (
     <div>
       {hasMedia &&
-        <Media
-          image={image}
-          iframe={iframe}
-        />
+        <div className="hero-media">
+          <Media
+            borderRadius={mediaBorderRadius}
+            elevation={itemMediaElevation || mediaElevation}
+            flex={mediaFlex}
+            image={image}
+            iframe={iframe}
+          />
+        </div>
+
       }
       {hasText &&
         <Text
@@ -76,17 +84,16 @@ const HeroContent = ({
           h1TextShadow={h1TextShadow}
           h2TextShadow={h2TextShadow}
           h3TextShadow={h3TextShadow}
-          pTextShadow={pTextShadow}
         />
       }
       {hasButtons &&
         <Buttons
           button1BackgroundColor={button1BackgroundColor}
           button2BackgroundColor={button2BackgroundColor}
+          button1Border={button1Border}
+          button2Border={button2Border}
           button1Color={button1Color}
           button2Color={button2Color}
-          button1BorderColor={button1BorderColor}
-          button2BorderColor={button2BorderColor}
           button1Link={button1Link}
           button2Link={button2Link}
           button1Text={button1Text}

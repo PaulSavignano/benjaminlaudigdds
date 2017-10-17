@@ -2,6 +2,7 @@ import mongoose, { Schema } from 'mongoose'
 
 import Article from './Article'
 import Card from './Card'
+import ContactForm from './ContactForm'
 import Hero from './Hero'
 import Product from './Product'
 
@@ -21,7 +22,7 @@ const SectionSchema = new Schema({
   pageSlug: { type: String, trim: true },
   values: {
     alignItems: { type: String, trim: true },
-    backgroundColor: { type: String, trim: true },
+    containerBackgroundColor: { type: String, trim: true },
     flexFlow: { type: String, trim: true, default: 'row wrap' },
     justifyContent: { type: String, trim: true, default: 'space-between' },
     kind: { type: String, trim: true, default: 'Flex' },
@@ -47,6 +48,9 @@ SectionSchema.post('findOneAndRemove', function(doc, next) {
         .catch(error => console.error({ error }))
       case 'Card':
         return Card.findOneAndRemove({ _id: item.item })
+        .catch(error => console.error({ error }))
+      case 'ContactForm':
+        return ContactForm.findOneAndRemove({ _id: item.item })
         .catch(error => console.error({ error }))
       case 'Hero':
         return Hero.findOneAndRemove({ _id: item.item })

@@ -25,53 +25,33 @@ export const add = (req, res) => {
     .then(section => {
       Page.findOne({ _id: section.page })
       .then(page => res.send({ editItem: doc, page }))
-      .catch(error => {
-        console.error(error)
-        res.status(400).send({ error })
-      })
+      .catch(error => { console.error(error); res.status(400).send({ error })})
     })
-    .catch(error => {
-      console.error(error)
-      res.status(400).send({ error })
-    })
+    .catch(error => { console.error(error); res.status(400).send({ error })})
   })
-  .catch(error => {
-    console.error(error)
-    res.status(400).send({ error })
-  })
+  .catch(error => { console.error(error); res.status(400).send({ error })})
 }
 
 
 export const update = (req, res) => {
+  console.log('made it to contactForm update', req.params)
   const { _id } = req.params
   if (!ObjectID.isValid(_id)) return res.status(404).send({ error: 'Invalid id' })
   const {
     type,
     values
   } = req.body
-  switch (type) {
-    case 'UPDATE_VALUES':
-      ContactForm.findOneAndUpdate(
-        { _id },
-        { $set: { values }},
-        { new: true }
-      )
-      .then(doc => {
-        Page.findOne({ _id: doc.page })
-        .then(page => res.send({ page }))
-        .catch(error => {
-          console.error(error)
-          res.status(400).send({ error })
-        })
-      })
-      .catch(error => {
-        console.error(error)
-        res.status(400).send({ error })
-      })
-      break
-    default:
-      return
-  }
+  return ContactForm.findOneAndUpdate(
+    { _id },
+    { $set: { values }},
+    { new: true }
+  )
+  .then(doc => {
+    Page.findOne({ _id: doc.page })
+    .then(page => res.send({ page }))
+    .catch(error => { console.error(error); res.status(400).send({ error })})
+  })
+  .catch(error => { console.error(error); res.status(400).send({ error })})
 }
 
 
@@ -89,14 +69,8 @@ export const remove = (req, res) => {
     .then(section => {
       Page.findOne({ _id: section.page })
       .then(page => res.send({ page }))
-      .catch(error => {
-        console.error(error)
-        res.status(400).send({ error })
-      })
+      .catch(error => { console.error(error); res.status(400).send({ error })})
     })
   })
-  .catch(error => {
-    console.error(error)
-    res.status(400).send({ error })
-  })
+  .catch(error => { console.error(error); res.status(400).send({ error })})
 }

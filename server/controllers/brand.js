@@ -12,20 +12,14 @@ export const add = (req, res) => {
   const brand = new Brand({ _id })
   brand.save()
   .then(doc => res.send(doc))
-  .catch(error => {
-    console.error(error)
-    res.status(400).send({ error })
-  })
+  .catch(error => { console.error(error); res.status(400).send({ error })})
 }
 
 
 export const get = (req, res) => {
   Brand.find({})
   .then(doc => res.send(doc))
-  .catch(error => {
-    console.error(error)
-    res.status(400).send({ error })
-  })
+  .catch(error => { console.error(error); res.status(400).send({ error })})
 }
 
 
@@ -33,10 +27,7 @@ export const getId = (req, res) => {
   const _id = req.params._id
   Brand.find({ _id })
   .then(doc => res.send(doc))
-  .catch(error => {
-    console.error(error)
-    res.status(400).send({ error })
-  })
+  .catch(error => { console.error(error); res.status(400).send({ error })})
 }
 
 
@@ -65,35 +56,27 @@ export const updateAppBar = (req, res) => {
           { new: true }
         )
         .then(doc => res.send(doc))
-        .catch(error => {
-          console.error(error)
-          res.status(400).send({ error })
-        })
+        .catch(error => { console.error(error); res.status(400).send({ error })})
       })
-      .catch(error => {
-        console.error(error)
-        res.status(400).send({ error })
-      })
+      .catch(error => { console.error(error); res.status(400).send({ error })})
       break
 
-    case 'DELETE_IMAGE':
-      deleteFile({ Key: image.src })
+    case 'DELETE_IMAGE_AND_UPDATE_VALUES':
+      deleteFile({ Key: oldImageSrc })
       .then(() => {
         Brand.findOneAndUpdate(
           { _id },
-          { $set: { 'appBar.image.src': null }},
+          { $set: {
+            'appBar.image.src': null,
+            values
+          }
+        },
           { new: true }
         )
         .then(doc => res.send(doc))
-        .catch(error => {
-          console.error(error)
-          res.status(400).send({ error })
-        })
+        .catch(error => { console.error(error); res.status(400).send({ error })})
       })
-      .catch(error => {
-        console.error(error)
-        res.status(400).send({ error })
-      })
+      .catch(error => { console.error(error); res.status(400).send({ error })})
       break
 
     case 'UPDATE_VALUES':
@@ -103,10 +86,7 @@ export const updateAppBar = (req, res) => {
         { new: true }
       )
       .then(doc => res.send(doc))
-      .catch(error => {
-        console.error(error)
-        res.status(400).send({ error })
-      })
+      .catch(error => { console.error(error); res.status(400).send({ error })})
       break
 
     default:
@@ -125,10 +105,7 @@ export const updateArticleStyle = (req, res) => {
     { new: true }
   )
   .then(doc => res.send(doc))
-  .catch(error => {
-    console.error(error)
-    res.status(400).send()
-  })
+  .catch(error => { console.error(error); res.status(400).send()})
 }
 
 
@@ -157,35 +134,26 @@ export const updateBusiness = (req, res) => {
           { new: true }
         )
         .then(doc => res.send(doc))
-        .catch(error => {
-          console.error(error)
-          res.status(400).send({ error })
-        })
+        .catch(error => { console.error(error); res.status(400).send({ error })})
       })
-      .catch(error => {
-        console.error(error)
-        res.status(400).send({ error })
-      })
+      .catch(error => { console.error(error); res.status(400).send({ error })})
       break
 
-    case 'DELETE_IMAGE':
+    case 'DELETE_IMAGE_AND_UPDATE_VALUES':
       deleteFile({ Key: image.src })
       .then(() => {
         Brand.findOneAndUpdate(
           { _id },
-          { $set: { 'business.image.src': null }},
+          { $set: {
+            'business.image.src': null,
+            values
+          }},
           { new: true }
         )
         .then(doc => res.send(doc))
-        .catch(error => {
-          console.error(error)
-          res.status(400).send({ error })
-        })
+        .catch(error => { console.error(error); res.status(400).send({ error })})
       })
-      .catch(error => {
-        console.error(error)
-        res.status(400).send({ error })
-      })
+      .catch(error => { console.error(error); res.status(400).send({ error })})
       break
 
     case 'UPDATE_VALUES':
@@ -195,10 +163,7 @@ export const updateBusiness = (req, res) => {
         { new: true }
       )
       .then(doc => res.send(doc))
-      .catch(error => {
-        console.error(error)
-        res.status(400).send({ error })
-      })
+      .catch(error => { console.error(error); res.status(400).send({ error })})
       break
 
     default:
@@ -217,10 +182,7 @@ export const updateBodyStyle = (req, res) => {
     { new: true }
   )
   .then(doc => res.send(doc))
-  .catch(error => {
-    console.error(error)
-    res.status(400).send({ error })
-  })
+  .catch(error => { console.error(error); res.status(400).send({ error })})
 }
 
 export const updateCardStyle = (req, res) => {
@@ -233,10 +195,7 @@ export const updateCardStyle = (req, res) => {
     { new: true }
   )
   .then(doc => res.send(doc))
-  .catch(error => {
-    console.error(error)
-    res.status(400).send()
-  })
+  .catch(error => { console.error(error); res.status(400).send()})
 }
 
 
@@ -265,35 +224,26 @@ export const updateFooter = (req, res) => {
             { new: true }
           )
           .then(doc => res.send(doc))
-          .catch(error => {
-            console.error(error)
-            res.status(400).send({ error })
-          })
+          .catch(error => { console.error(error); res.status(400).send({ error })})
         })
-        .catch(error => {
-          console.error(error)
-          res.status(400).send({ error })
-        })
+        .catch(error => { console.error(error); res.status(400).send({ error })})
       break
 
-    case 'DELETE_IMAGE':
+    case 'DELETE_IMAGE_AND_UPDATE_VALUES':
       deleteFile({ Key: image.src })
         .then(() => {
           Brand.findOneAndUpdate(
             { _id },
-            { $set: { 'footer.image.src': null }},
+            { $set: {
+              'footer.image.src': null,
+              values
+            }},
             { new: true }
           )
           .then(doc => res.send(doc))
-          .catch(error => {
-            console.error(error)
-            res.status(400).send({ error })
-          })
+          .catch(error => { console.error(error); res.status(400).send({ error })})
         })
-        .catch(error => {
-          console.error(error)
-          res.status(400).send({ error })
-        })
+        .catch(error => { console.error(error); res.status(400).send({ error })})
       break
 
     case 'UPDATE_VALUES':
@@ -305,10 +255,7 @@ export const updateFooter = (req, res) => {
       .then(doc => {
         res.send(doc)
       })
-      .catch(error => {
-        console.error(error)
-        res.status(400).send({ error })
-      })
+      .catch(error => { console.error(error); res.status(400).send({ error })})
       break
 
     default:
@@ -327,10 +274,7 @@ export const updateHeroStyle = (req, res) => {
     { new: true }
   )
   .then(doc => res.send(doc))
-  .catch(error => {
-    console.error(error)
-    res.status(400).send()
-  })
+  .catch(error => { console.error(error); res.status(400).send({ error })})
 }
 
 // Update Theme
@@ -344,10 +288,7 @@ export const updatePalette = (req, res) => {
     { new: true }
   )
   .then(doc => res.send(doc))
-  .catch(error => {
-    console.error(error)
-    res.status(400).send({ error })
-  })
+  .catch(error => { console.error(error); res.status(400).send({ error })})
 }
 
 export const updateProductStyle = (req, res) => {
@@ -360,10 +301,7 @@ export const updateProductStyle = (req, res) => {
     { new: true }
   )
   .then(doc => res.send(doc))
-  .catch(error => {
-    console.error(error)
-    res.status(400).send()
-  })
+  .catch(error => { console.error(error); res.status(400).send({ error })})
 }
 
 
@@ -377,10 +315,7 @@ export const updateTypography = (req, res) => {
     { new: true }
   )
   .then(doc => res.send(doc))
-  .catch(error => {
-    console.error(error)
-    res.status(400).send({ error })
-  })
+  .catch(error => { console.error(error); res.status(400).send({ error })})
 }
 
 
@@ -391,8 +326,5 @@ export const remove = (req, res) => {
   if (!ObjectID.isValid(_id)) return res.status(404).send()
   Brand.findOneAndRemove({ _id })
   .then(_id => res.send(_id))
-  .catch(error => {
-    console.error(error)
-    res.status(400).send({ error })
-  })
+  .catch(error => { console.error(error); res.status(400).send({ error })})
 }

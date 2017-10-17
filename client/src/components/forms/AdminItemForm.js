@@ -22,78 +22,193 @@ import adminItemForms from './adminItemForms'
 class AdminItemForm extends Component {
   state = {
     backgroundImageEdit: false,
+    backgroundTimeoutId: null,
+    deleteBackgroundImage: false,
+    disabled: true,
     imageEdit: false,
+    imageTimeoutId: null,
     itemForm: null
   }
   handleImageEdit = (bool) => {
-    this.setState({ imageEdit: bool })
-    setTimeout(() => window.dispatchEvent(new Event('resize')), 10)
+    const imageTimeoutId = setTimeout(() => {
+      window.dispatchEvent(new Event('resize'))
+      clearTimeout(this.state.imageTimeoutId)
+    }, 9)
+    this.setState({
+      disabled: false,
+      imageEdit: bool,
+      imageTimeoutId
+    })
   }
   handleBackgroundImageEdit = (bool) => {
-    this.setState({ backgroundImageEdit: bool })
-    setTimeout(() => window.dispatchEvent(new Event('resize')), 10)
+    const backgroundTimeoutId = setTimeout(() => {
+      window.dispatchEvent(new Event('resize'))
+      clearTimeout(this.state.backgroundTimeoutId)
+    }, 9)
+    this.setState({
+      backgroundImageEdit: bool,
+      backgroundTimeoutId,
+      disabled: false
+    })
   }
-  handleImageRemove = (image) => {
-    const { dispatch, editItem: { item: { _id }}} = this.props
-    this.setState({ imageEdit: false })
-    return dispatch(this.state.itemForm.update(_id, { type: 'DELETE_IMAGE', image }))
+  handleImageRemove = () => {
+    const { editItem: { item: { image }}} = this.props
+    const deleteImage = image.src ? true : false
+    this.setState({
+      imageEdit: false,
+      deleteImage,
+      disabled: false
+    })
   }
-  handleBackgroundImageRemove = (image) => {
-    const { dispatch, editItem: { item: { _id }}} = this.props
-    this.setState({ backgroundImageEdit: false })
-    return dispatch(this.state.itemForm.update(_id, { type: 'DELETE_BACKGROUND_IMAGE', image }))
+  handleBackgroundImageRemove = () => {
+    const { editItem: { item: { backgroundImage }}} = this.props
+    const deleteBackgroundImage = backgroundImage.src ? true : false
+    this.setState({
+      backgroundImageEdit: false,
+      deleteBackgroundImage,
+      disabled: false
+    })
   }
   handleFormSubmit = (values) => {
-    const { imageEdit, backgroundImageEdit } = this.state
-    const { dispatch, editItem: { item: { _id, pageSlug }}, image, backgroundImage } = this.props
+    const {
+      backgroundImageEdit,
+      deleteBackgroundImage,
+      imageEdit,
+      deleteImage,
+    } = this.state
+    const {
+      dispatch,
+      editItem: {
+        item: {
+          _id,
+          image,
+          backgroundImage,
+          pageSlug
+        }
+      }
+    } = this.props
     const oldImageSrc = image && image.src ? image.src : null
     const oldBackgroundImageSrc = backgroundImage && backgroundImage.src ? backgroundImage.src : null
     const newImage = imageEdit ? this.imageEditor.handleSave() : null
     const newBackgroundImage = backgroundImageEdit ? this.backgroundImageEditor.handleSave() : null
     const fetchUpdate = this.state.itemForm.update
-    if (imageEdit && backgroundImageEdit) {
-      return dispatch(fetchUpdate(_id, {
-        type: 'UPDATE_IMAGE_AND_BACKGROUND_IMAGE_AND_VALUES',
-        image: newImage,
-        backgroundImage: newBackgroundImage,
-        oldImageSrc,
-        oldBackgroundImageSrc,
-        pageSlug,
-        values
-      }))
+    switch(true) {
+      case (imageEdit && backgroundImageEdit):
+        return dispatch(fetchUpdate({
+          _id,
+          path: 'update-with-image-and-background-image',
+          update: {
+            newImage,
+            newBackgroundImage,
+            oldImageSrc,
+            oldBackgroundImageSrc,
+            pageSlug,
+            values
+          }
+        }))
+      case (imageEdit && deleteBackgroundImage):
+        return dispatch(fetchUpdate({
+          _id,
+          path: 'update-with-image-and-delete-background-image',
+          update: {
+            newImage,
+            oldImageSrc,
+            oldBackgroundImageSrc,
+            pageSlug,
+            values
+          }
+        }))
+      case (backgroundImageEdit && deleteImage):
+        return dispatch(fetchUpdate({
+          _id,
+          path: 'update-with-background-image-and-delete-image',
+          update: {
+            newBackgroundImage,
+            oldImageSrc,
+            oldBackgroundImageSrc,
+            pageSlug,
+            values
+          }
+        }))
+      case (deleteImage && deleteBackgroundImage):
+        return dispatch(fetchUpdate({
+          _id,
+          path: 'update-with-delete-image-and-delete-background-image',
+          update: {
+            oldImageSrc,
+            oldBackgroundImageSrc,
+            pageSlug,
+            values
+          }
+        }))
+      case (imageEdit):
+        return dispatch(fetchUpdate({
+          _id,
+          path: 'update-with-image',
+          update: {
+            newImage,
+            oldImageSrc,
+            pageSlug,
+            values
+          }
+        }))
+      case (backgroundImageEdit):
+        return dispatch(fetchUpdate({
+          _id,
+          path: 'update-with-background-image',
+          update: {
+            newBackgroundImage,
+            oldBackgroundImageSrc,
+            pageSlug,
+            values
+          }
+        }))
+      case (deleteImage):
+        return dispatch(fetchUpdate({
+          _id,
+          path: 'update-with-delete-image',
+          update: {
+            oldImageSrc,
+            values
+          }
+        }))
+      case (deleteBackgroundImage):
+        return dispatch(fetchUpdate({
+          _id,
+          path: 'update-with-delete-background-image',
+          update: {
+            oldBackgroundImageSrc,
+            values
+          }
+        }))
+      default:
+        console.log('dispatching update', _id)
+        return dispatch(fetchUpdate({
+          _id,
+          path: 'update-values',
+          update: {
+            values,
+          }
+        }))
     }
-    if (imageEdit) {
-      return dispatch(fetchUpdate(_id, {
-        type: 'UPDATE_IMAGE_AND_VALUES',
-        image: newImage,
-        oldImageSrc,
-        pageSlug,
-        values
-      }))
-    }
-    if (backgroundImageEdit) {
-      return dispatch(fetchUpdate(_id, {
-        type: 'UPDATE_BACKGROUND_IMAGE_AND_VALUES',
-        backgroundImage: newBackgroundImage,
-        oldBackgroundImageSrc,
-        pageSlug,
-        values
-      }))
-    }
-    return dispatch(fetchUpdate(_id, { type: 'UPDATE_VALUES', values, pageSlug }))
   }
-  handleRemove = () => {
-    const { dispatch, editItem: { item: { _id }}} = this.props
-    return dispatch(this.state.itemForm.delete(_id))
+  handleDelete = () => {
+    const { dispatch, editItem: { item: { _id }, kind }} = this.props
+    if (window.confirm(`Are you sure you want to delete ${kind.toLowerCase()}?`)) {
+      return dispatch(this.state.itemForm.delete(_id))
+    }
   }
   handleStopEdit = () => this.props.dispatch(stopEdit())
-  handleNumberToString = value => {
-    if (value) return value.toString()
-  }
   componentWillMount() {
-    const { editItem: { kind }} = this.props
+    const {
+      editItem: { kind },
+      pristine
+    } = this.props
     const itemForm = adminItemForms.find(form => form.name === kind)
-    this.setState({ itemForm })
+    this.setState({ disabled: pristine, itemForm })
+  }
+  componentWillReceiveProps({ pristine }) {
+    if (pristine !== this.props.pristine) this.setState({ disabled: pristine })
   }
   setImageFormRef = (imageEditor) => this.imageEditor = imageEditor
   setBackgroundImageFormRef = (backgroundImageEditor) => this.backgroundImageEditor = backgroundImageEditor
@@ -106,7 +221,6 @@ class AdminItemForm extends Component {
         item: { _id, backgroundImage, image },
         kind,
       },
-      invalid,
       pristine,
       submitting
     } = this.props
@@ -116,7 +230,7 @@ class AdminItemForm extends Component {
         actions={
           <div className="button-container">
             <RaisedButton
-              disabled={pristine || invalid}
+              disabled={this.state.disabled}
               onTouchTap={handleSubmit(this.handleFormSubmit)}
               label={submitting ?
                 <CircularProgress key={1} color="#ffffff" size={25} style={{ verticalAlign: 'middle' }} />
@@ -132,7 +246,7 @@ class AdminItemForm extends Component {
               className="delete-button"
               labelColor="#ffffff"
               style={{ flex: '0 1 auto', margin: 4 }}
-              onTouchTap={this.handleRemove}
+              onTouchTap={this.handleDelete}
             />
             <RaisedButton
               type="button"
@@ -175,18 +289,18 @@ class AdminItemForm extends Component {
               ref={this.setBackgroundImageFormRef}
             />
           }
-          <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
+          <div className="field-container">
             {this.state.itemForm.fields.map(({ name, type, options }) => {
-              const normalizeNumber = type === 'number' ? { normalize: this.handleNumberToString() } : null
-              return (
-                type === 'select' ?
-                  <Field
+              const format = value => value === undefined ? undefined : value.toString()
+              switch(type) {
+                case 'select':
+                  return <Field
                     key={name}
                     className="field"
                     component={renderSelectField}
                     label={name}
                     name={name}
-                  >
+                         >
                     {options.map(option => (
                       <MenuItem
                         key={option}
@@ -195,26 +309,35 @@ class AdminItemForm extends Component {
                       />
                     ))}
                   </Field>
-                : type === 'wysiwgy' ?
-                  <Field
+                case 'wysiwgy':
+                  return <Field
                     className="field"
                     component={renderWysiwgyField}
                     key={name}
                     label={name}
                     name={name}
                     type={type}
-                  />
-                :
-                <Field
-                  className="field"
-                  component={renderTextField}
-                  key={name}
-                  label={name}
-                  name={name}
-                  type={type}
-                  {...normalizeNumber}
-                />
-              )
+                         />
+                case 'number':
+                  return <Field
+                    className="field"
+                    component={renderTextField}
+                    key={name}
+                    label={name}
+                    name={name}
+                    type={type}
+                    format={format}
+                         />
+                default:
+                  return <Field
+                    className="field"
+                    component={renderTextField}
+                    key={name}
+                    label={name}
+                    name={name}
+                    type={type}
+                         />
+              }
             })}
           </div>
         </form>
