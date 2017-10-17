@@ -125,3 +125,7 @@
 .drawer-image {
   max-height: 64px;
 }
+
+.drawer-brand-name {
+  align-self: center;
+}

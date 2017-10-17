@@ -64,8 +64,9 @@ class Header extends Component {
               :
               <div className="appbar">
                 <HeaderBrand
-                  className="appbar-brand"
                   backgroundColor={backgroundColor}
+                  color={color}
+                  className="appbar-brand"
                   fontFamily={brandFontFamily}
                   fontSize={fontSize}
                   fontWeight={fontWeight}
@@ -104,6 +105,8 @@ class Header extends Component {
           >
             <HeaderBrand
               backgroundColor={backgroundColor}
+              color={color}
+              className="drawer-brand-name"
               fontFamily={brandFontFamily}
               fontSize={fontSize}
               fontWeight={fontWeight}
