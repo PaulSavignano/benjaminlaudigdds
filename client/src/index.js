@@ -1,5 +1,4 @@
 import React from 'react'
-import 'babel-polyfill'
 import { Provider } from 'react-redux'
 import { render } from 'react-dom'
 
