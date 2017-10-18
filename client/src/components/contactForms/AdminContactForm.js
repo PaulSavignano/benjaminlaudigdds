@@ -23,7 +23,7 @@ class AdminContactForm extends Component {
       onMouseLeave,
       item,
       user,
-      phone,
+      phone
     } = this.props
     return (
       <Card

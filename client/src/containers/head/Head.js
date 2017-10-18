@@ -14,7 +14,7 @@ const Head = ({
   isFetching ? null :
   <Helmet>
     <meta charSet="utf-8" />
-    {googleSiteVerification && <meta name="google-site-verification" content={googleSiteVerification} />}
+    <meta name="google-site-verification" content={googleSiteVerification} />
     {name && <title>{name}</title>}
     {description && <meta name="description" content={description} />}
     {keywords && <meta name="keywords" content={keywords} />}
