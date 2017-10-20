@@ -9,23 +9,27 @@ const H3 = ({
   color,
   margin,
   textAlign,
+  textColor,
   textShadow,
   typography: {
     values: {
+      fontFamily,
+      fontWeight,
       h3FontFamily,
-      h3FontSize,
-      h3FontWeight,
-      h3LetterSpacing,
+      h3FontSize: fontSize,
+      h3LetterSpacing: letterSpacing,
+      lineHeight
     }
   }
 }) => (
   <h3
     style={{
-      color,
-      fontFamily: h3FontFamily,
-      fontSize: h3FontSize,
-      fontWeight: h3FontWeight,
-      letterSpacing: h3LetterSpacing,
+      color: color || textColor,
+      fontFamily: h3FontFamily || fontFamily,
+      fontSize,
+      fontWeight,
+      letterSpacing,
+      lineHeight,
       margin,
       textAlign,
       textShadow,

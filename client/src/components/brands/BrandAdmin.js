@@ -12,9 +12,8 @@ const formFields = [{
     { name: 'fontFamily', type: 'text' },
     { name: 'fontSize', type: 'text' },
     { name: 'fontWeight', type: 'text' },
-    { name: 'height', type: 'text' },
     { name: 'imageBorderRadius', type: 'text' },
-    { name: 'imageElevation', type: 'number' },
+    { name: 'imageElevation', type: 'number', max: 24, min: 0 },
     { name: 'imagePosition', type: 'select', options: [ 'absolute', 'relative' ]},
     { name: 'imageWidth', type: 'text' },
     { name: 'letterSpacing', type: 'text' },
@@ -22,7 +21,7 @@ const formFields = [{
     { name: 'name', type: 'text' },
     { name: 'navColor', type: 'text' },
     { name: 'showPhone', type: 'select', options: [ 'true', 'false' ] },
-    { name: 'textShadow', type: 'text' },
+    { name: 'textShadow', type: 'text' }
   ]
 }, {
   name: 'articleStyle',
@@ -44,7 +43,7 @@ const formFields = [{
     { name: 'h3TextShadow', type: 'text' },
     { name: 'pColor', type: 'text' },
     { name: 'mediaBorder', type: 'text' },
-    { name: 'mediaElevation', type: 'number' },
+    { name: 'imageElevation', type: 'number', max: 24, min: 0 },
   ]
 }, {
   name: 'bodyStyle',
@@ -68,7 +67,6 @@ const formFields = [{
     { name: 'state', type: 'state' },
     { name: 'zip', type: 'zip' },
     { name: 'imageBorderRadius', type: 'text' },
-    { name: 'imageElevation', type: 'number' },
     { name: 'facebook', type: 'text' },
     { name: 'github', type: 'text' },
     { name: 'google', type: 'text' },
@@ -87,7 +85,7 @@ const formFields = [{
     { name: 'button2Border', type: 'text' },
     { name: 'button1Color', type: 'text' },
     { name: 'button2Color', type: 'text' },
-    { name: 'elevation', type: 'number' },
+    { name: 'imageElevation', type: 'number', max: 24, min: 0 },
     { name: 'flex', type: 'text' },
     { name: 'h1Align', type: 'select', options: ['left', 'center', 'right']  },
     { name: 'h1Color', type: 'text' },
@@ -100,7 +98,7 @@ const formFields = [{
     { name: 'h3TextShadow', type: 'text' },
     { name: 'pColor', type: 'text' },
     { name: 'margin', type: 'text' },
-    { name: 'mediaBorder', type: 'text' },
+    { name: 'mediaBorder', type: 'text' }
   ]
 }, {
   name: 'footer',
@@ -110,7 +108,7 @@ const formFields = [{
     { name: 'borderTop', type: 'text' },
     { name: 'borderBottom', type: 'text' },
     { name: 'imageBorderRadius', type: 'text' },
-    { name: 'imageElevation', type: 'number' },
+    { name: 'imageElevation', type: 'number', max: 24, min: 0 },
     { name: 'imageMargin', type: 'text' }
   ]
 }, {
@@ -135,9 +133,7 @@ const formFields = [{
     { name: 'h3Color', type: 'text' },
     { name: 'h3TextShadow', type: 'text' },
     { name: 'pColor', type: 'text' },
-    { name: 'mediaBorder', type: 'text' },
-    { name: 'mediaElevation', type: 'number' },
-    { name: 'minHeight', type: 'text' },
+    { name: 'minHeight', type: 'text' }
   ]
 }, {
   name: 'palette',
@@ -155,7 +151,7 @@ const formFields = [{
     { name: 'borderColor', type: 'text' },
     { name: 'disabledColor', type: 'text' },
     { name: 'pickerHeaderColor', type: 'text' },
-    { name: 'shadowColor', type: 'text' },
+    { name: 'shadowColor', type: 'text' }
   ]
 }, {
   name: 'productStyle',
@@ -166,28 +162,26 @@ const formFields = [{
     { name: 'nameColor', type: 'text' },
     { name: 'nameTextShadow', type: 'text' },
     { name: 'margin', type: 'text' },
-    { name: 'mediaElevation', type: 'text' },
+    { name: 'imageElevation', type: 'number', max: 24, min: 0 },
   ]
 }, {
   name: 'typography',
   fields: [
     { name: 'fontFamily', type: 'text' },
+    { name: 'fontWeight', type: 'text' },
     { name: 'h1FontFamily', type: 'text' },
     { name: 'h1FontSize', type: 'text' },
-    { name: 'h1FontWeight', type: 'text' },
     { name: 'h1LetterSpacing', type: 'text' },
     { name: 'h2FontFamily', type: 'text' },
     { name: 'h2FontSize', type: 'text' },
-    { name: 'h2FontWeight', type: 'text' },
     { name: 'h2LetterSpacing', type: 'text' },
     { name: 'h3FontFamily', type: 'text' },
     { name: 'h3FontSize', type: 'text' },
-    { name: 'h3FontWeight', type: 'text' },
     { name: 'h3LetterSpacing', type: 'text' },
+    { name: 'lineHeight', type: 'text' },
     { name: 'pFontFamily', type: 'text' },
     { name: 'pFontSize', type: 'text' },
-    { name: 'pFontWeight', type: 'text' },
-    { name: 'pLetterSpacing', type: 'text' }
+    { name: 'pLetterSpacing', type: 'text' },
   ]
 }]
 
